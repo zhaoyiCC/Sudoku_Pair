@@ -1,4 +1,4 @@
-#include "sudoku.h"
+ï»¿#include "sudoku.h"
 
 int Core::solve_unique(int tmp[M]) {
 	hasAnswer = 0;//false
@@ -20,7 +20,7 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 			cout << "----------------------" << endl;
 		first = random(ran) + from;
 		if (debug)
-			cout << "¿Õ°×¸öÊı£º" << first << endl;
+			cout << "ç©ºç™½ä¸ªæ•°ï¼š" << first << endl;
 
 		fre = work3(first, id, 1.0*first / 81.0);
 		if (fre >= dow && fre <= upd) {
@@ -28,7 +28,7 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 				uni = solve_unique(game);
 				if (uni > 1) {
 					if (debug)
-						cout << "^^^^½â²»Î¨Ò»  " << id << endl;
+						cout << "^^^^è§£ä¸å”¯ä¸€  " << id << endl;
 					//id++;
 					continue;
 				}
@@ -41,13 +41,13 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 		if (debug)
 			cout << "----------------------" << id << endl;
 	}
-	cout << "×öµ½ÁËµÚ¼¸¸öÊı¶À: " << id << " ²úÉúÊı¶ÀÊı£º " << cnt_f << endl;
+	cout << "åšåˆ°äº†ç¬¬å‡ ä¸ªæ•°ç‹¬: " << id << " äº§ç”Ÿæ•°ç‹¬æ•°ï¼š " << cnt_f << endl;
 }
 
 void Core::generate(int number, int mode, int result[][M]) {
 	//cout << "GGG" << endl;
 	init_gen(10000, 0);
-	
+
 	switch (mode) {
 	case 1:
 		generate_single(number, 40, 10, 0, 650, false, result);
@@ -110,7 +110,7 @@ void Core::init_gen(int val, int type) {
 	hasAnswer = 0;
 	dfs1(1, type);
 
-	
+
 
 	//generate(1, 20, 60, true, lll);
 	//int ppp[M] = {
@@ -182,14 +182,14 @@ bool Core::isEquivalent(int a[81], int b[81]) {
 
 bool Core::deleteElement(int pos, int r) {
 	int i;
-	if (a[pos][r] == 1)  // ´ú±íÖ®Ç°ÒÑ¾­²»ÈÃÌîÁË
+	if (a[pos][r] == 1)  // ä»£è¡¨ä¹‹å‰å·²ç»ä¸è®©å¡«äº†
 		return true;
 	a[pos][r] = 1;
-	if (++a[pos][0] == 9)  // ´ú±íÕâ¸ö¸ñ×ÓÃ»ÓĞÖµ¿ÉÒÔÌîÁË
+	if (++a[pos][0] == 9)  // ä»£è¡¨è¿™ä¸ªæ ¼å­æ²¡æœ‰å€¼å¯ä»¥å¡«äº†
 		return false;
 	if (a[pos][0] == 8) {
 		for (i = 1; i <= 9; ++i)
-			if (a[pos][i] == 0)  // ÕÒµ½ÊÇË­¿ÉÒÔÌî
+			if (a[pos][i] == 0)  // æ‰¾åˆ°æ˜¯è°å¯ä»¥å¡«
 				break;
 		if (!modifyElement(pos, i))
 			return false;
@@ -197,25 +197,25 @@ bool Core::deleteElement(int pos, int r) {
 	return true;
 }
 bool Core::modifyElement(int pos, int r) {
-	int p = pos / 9;  // ĞĞºÅ
-	int q = pos % 9;  // ÁĞºÅ
+	int p = pos / 9;  // è¡Œå·
+	int q = pos % 9;  // åˆ—å·
 	int h;
 	x[pos] = r;
 	rep(i, 1, 9)
 		a[pos][i] = 1;
-	a[pos][0] = 8;  // ´ú±íÖ»ÓĞÒ»¸öÔªËØ¿ÉÒÔÌî
-	a[pos][r] = 0;  // ÄÇ¾ÍÊÇr
-	rep(j, 0, 8) {  // Ôö¼ÓÍ¬ĞĞµÄÆäËü¸ñ×ÓµÄÏŞÖÆ
+	a[pos][0] = 8;  // ä»£è¡¨åªæœ‰ä¸€ä¸ªå…ƒç´ å¯ä»¥å¡«
+	a[pos][r] = 0;  // é‚£å°±æ˜¯r
+	rep(j, 0, 8) {  // å¢åŠ åŒè¡Œçš„å…¶å®ƒæ ¼å­çš„é™åˆ¶
 		h = Position(p, j);
 		if (h != pos && !deleteElement(h, r))
 			return false;
 	}
-	rep(i, 0, 8) {  // Ôö¼ÓÍ¬ÁĞµÄÆäËü¸ñ×ÓµÄÏŞÖÆ
+	rep(i, 0, 8) {  // å¢åŠ åŒåˆ—çš„å…¶å®ƒæ ¼å­çš„é™åˆ¶
 		h = Position(i, q);
 		if (h != pos && !deleteElement(h, r))
 			return false;
 	}
-	rep(i, 0, 2)  // Ôö¼ÓÍ¬¾Å¹¬¸ñµÄÆäËü¸ñ×ÓµÄÏŞÖÆ
+	rep(i, 0, 2)  // å¢åŠ åŒä¹å®«æ ¼çš„å…¶å®ƒæ ¼å­çš„é™åˆ¶
 		rep(j, 0, 2) {
 		h = (3 * (p / 3) + i) * 9 + (3 * (q / 3) + j);
 		if (h != pos && !deleteElement(h, r))
@@ -295,7 +295,7 @@ void Core::dfs1(int k, int type) {
 			out_file(aaa);
 		ans_all_cnt++;
 
-		memcpy(ans_all[ans_all_cnt], aaa, sizeof(aaa));//´æ´¢´ğ°¸
+		memcpy(ans_all[ans_all_cnt], aaa, sizeof(aaa));//å­˜å‚¨ç­”æ¡ˆ
 
 		if (++cnt >= value) {
 			hasAnswer = 1;//true
@@ -327,7 +327,7 @@ int Core::freedom(int a[M]) {
 		rep(p, 0, 8)
 			if (p != x && a[p * 9 + y] == 0)
 				res++;
-		rep(i, 0, 2)  // Ôö¼ÓÍ¬¾Å¹¬¸ñµÄÆäËü¸ñ×ÓµÄÏŞÖÆ
+		rep(i, 0, 2)  // å¢åŠ åŒä¹å®«æ ¼çš„å…¶å®ƒæ ¼å­çš„é™åˆ¶
 			rep(j, 0, 2) {
 			h = (3 * (x / 3) + i) * 9 + (3 * (y / 3) + j);
 			if (h != node && a[h] == 0)
@@ -339,11 +339,11 @@ int Core::freedom(int a[M]) {
 
 double Core::getRandData(int min, int max)
 {
-	double m1 = (double)(rand() % 101) / 101;                        // ¼ÆËã 0£¬1Ö®¼äµÄËæ»úĞ¡Êı,µÃµ½µÄÖµÓò½üËÆÎª(0,1)
-	min++;                                                                             //½« Çø¼ä±äÎª(min+1,max),
-	double m2 = (double)((rand() % (max - min + 1)) + min);    //¼ÆËã min+1,max Ö®¼äµÄËæ»úÕûÊı£¬µÃµ½µÄÖµÓòÎª[min+1,max]
-	m2 = m2 - 1;                                                                        //ÁîÖµÓòÎª[min,max-1]
-	return m1 + m2;                                                                //·µ»ØÖµÓòÎª(min,max),ÎªËùÇóËæ»ú¸¡µãÊı
+	double m1 = (double)(rand() % 101) / 101;                        // è®¡ç®— 0ï¼Œ1ä¹‹é—´çš„éšæœºå°æ•°,å¾—åˆ°çš„å€¼åŸŸè¿‘ä¼¼ä¸º(0,1)
+	min++;                                                                             //å°† åŒºé—´å˜ä¸º(min+1,max),
+	double m2 = (double)((rand() % (max - min + 1)) + min);    //è®¡ç®— min+1,max ä¹‹é—´çš„éšæœºæ•´æ•°ï¼Œå¾—åˆ°çš„å€¼åŸŸä¸º[min+1,max]
+	m2 = m2 - 1;                                                                        //ä»¤å€¼åŸŸä¸º[min,max-1]
+	return m1 + m2;                                                                //è¿”å›å€¼åŸŸä¸º(min,max),ä¸ºæ‰€æ±‚éšæœºæµ®ç‚¹æ•°
 }
 
 void Core::dfs3(int k, int tot) {
@@ -392,7 +392,7 @@ int Core::work3(int num_0_t, int id_t, double p_t) {
 
 	int fre = freedom(game);
 	if (debug)
-		cout << "×ÔÓÉ¶È£º " << fre << endl;
+		cout << "è‡ªç”±åº¦ï¼š " << fre << endl;
 	//cout << "-----------" << endl;
 	//cout << "___________" << endl;
 	return fre;
