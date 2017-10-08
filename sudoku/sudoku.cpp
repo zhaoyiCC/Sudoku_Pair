@@ -2,40 +2,12 @@
 //  Created by ohazyi on 2017/10/1.
 //  Copyright © 2017 ohazyi. All rights reserved.
 
-#include <sys/timeb.h>
-#include <time.h>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <fstream>
+#include "sudoku.h"
+
 struct timeb tb;
-
-#define rep(i, a, b) for (int i = (a); i <= (b); ++i)
-inline int belonging(int x, int y) { return x / 3 * 3 + y / 3 + 1; }
-inline int Position(int x, int y) { return 9 * x + y; }
-// using namespace std;
-using std::cin;
-using std::cout;
-using std::string;
-using std::endl;
-
-const int N = 11;
-const int M = 83;
-int tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
-bool hasAnswer = false, debug = false, debug_time = false;
-bool modifyElement(int pos, int r), deleteElement(int pos, int r);
-FILE *out;
-
-int value, cnt, n, m, len = 0;  // value代表要输出的矩阵的个数
-char ch;
-bool vis_col[N][N], vis_row[N][N], vis_magic[N][N];
-
-inline bool find(int x, int y, int z) {
-	return (!vis_row[x][z] && !vis_col[y][z] && !vis_magic[belonging(x, y)][z]);
-}
-
+bool debug = false, debug_time = true, u_flag = false;
+int val = 0, r1, r2, pos_r;
+char c[110];
 string getTime() {  // 得到当前时间的ms的时间
 	time_t timep;
 	time(&timep);
@@ -51,183 +23,155 @@ void printTime(string str) {  // 得到当前时间
 	ftime(&tb);
 	printf(".%03d\n", tb.millitm);
 }
-bool deleteElement(int pos, int r) {
-	int i;
-	if (a[pos][r] == 1)  // 代表之前已经不让填了
-		return true;
-	a[pos][r] = 1;
-	if (++a[pos][0] == 9)  // 代表这个格子没有值可以填了
-		return false;
-	if (a[pos][0] == 8) {
-		for (i = 1; i <= 9; ++i)
-			if (a[pos][i] == 0)  // 找到是谁可以填
-				break;
-		if (!modifyElement(pos, i))
-			return false;
-	}
-	return true;
-}
-bool modifyElement(int pos, int r) {
-	int p = pos / 9;  // 行号
-	int q = pos % 9;  // 列号
-	int h;
-	x[pos] = r;
-	rep(i, 1, 9)
-		a[pos][i] = 1;
-	a[pos][0] = 8;  // 代表只有一个元素可以填
-	a[pos][r] = 0;  // 那就是r
-	rep(j, 0, 8) {  // 增加同行的其它格子的限制
-		h = Position(p, j);
-		if (h != pos && !deleteElement(h, r))
-			return false;
-	}
-	rep(i, 0, 8) {  // 增加同列的其它格子的限制
-		h = Position(i, q);
-		if (h != pos && !deleteElement(h, r))
-			return false;
-	}
-	rep(i, 0, 2)  // 增加同九宫格的其它格子的限制
-		rep(j, 0, 2) {
-		h = (3 * (p / 3) + i) * 9 + (3 * (q / 3) + j);
-		if (h != pos && !deleteElement(h, r))
-			return false;
-	}
-	return true;
-}
-void out_file(int *s) {
-	char ans[300];
-	int len = 0;
-	rep(i, 0, 80) {
-		ans[len++] = s[i];
-		ans[len++] = (((i + 1) % 9) == 0) ? '\n' : ' ';
-		if (debug) {
-			printf("%c ", s[i]);
-			if ((i + 1) % 9 == 0)
-				printf("\n");
-		}
-	}
-	if (debug)
-		printf("\n");
 
-	ans[len++] = '\n';
-	ans[len] = '\0';
-	// ans[len] = '\0';  // fputs(ans, out); // fputs("\n", out);
-	fwrite(ans, 1, strlen(ans), out);
-	// ans[len] = '\0'; //fprintf(out, "%s\n", ans);
-}
-void dfs(int k) {
-	int mx = -1, mxi;
-	rep(i, 0, 80) {
-		if (a[i][0]<8 && a[i][0]>mx) {
-			mx = a[i][0];
-			mxi = i;
-		}
-	}
-	if (mx == -1) {
-		rep(i, 0, 80) {
-			x[i] += '0';
-		}
-		out_file(x);
-		hasAnswer = true;
-		return;
-	}
-	memcpy(a_backup[k], a, sizeof(a));
-	rep(i, 1, 9) {
-		if (a[mxi][i] == 0) {
-			if (modifyElement(mxi, i))
-				dfs(k + 1);
-			memcpy(a, a_backup[k], sizeof(a));
-		}
-		if (hasAnswer)
-			return;
-	}
-}
-void dfs2(int k) {
-	if (hasAnswer)
-		return;
-	int x, y, h;
-	x = k / 9;
-	y = k % 9;
-	h = belonging(x, y);
-	if (k > 80) {
-		out_file(aaa);
-		if (++cnt >= value) {
-			hasAnswer = true;
-			// exit(0);
-		}
-		return;
-	}
-	rep(i, 1, 9) {
-		if (find(x, y, i)) {
-			aaa[k] = i + '0';
-
-			vis_row[x][i] = vis_col[y][i] = vis_magic[h][i] = true;
-			dfs2(k + 1);
-			vis_row[x][i] = vis_col[y][i] = vis_magic[h][i] = false;
-		}
-	}
-}
 bool calc(char* s) {
-	value = 0;
+	val = 0;
 	for (int i = 0; s[i]; ++i) {
 		if (s[i] < '0' || s[i] > '9')
 			return false;
-		value = value * 10 + s[i] - '0';
+		val = val * 10 + s[i] - '0';
 	}
+	cout << "val=" << val << endl;
 	return true;
 }
 void exit_invalid(string s) {
 	cout << s << endl;
 	exit(0);
 }
+
 int main(int argc, char *argv[]) {
-	if (argc != 3)
-		exit_invalid("Too many or too few arguments!");
-	if (strlen(argv[1]) < 2)
+	srand((int)time(0));
+
+	Core s;
+	/*if (argc != 3)
+		exit_invalid("Too many or too few arguments!");*/
+	if (strlen(argv[1]) != 2)
 		exit_invalid("Invalid arguments!");
-	out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
-	if (argv[1][1] == 'c') {
-		value = 1;  // value = atoi(argv[2])
-		if (!calc(argv[2])) {
-			puts("Invalid Command -c Number");
-			return 0;
-		}
-		if (value<1 || value>1000000) {
-			puts("Invalid -c number");
-			return 0;
-		}
+	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
+	s.debug = debug;
+	if (debug_time) printTime("起始时间");
+	if (strcmp(argv[1],"-c")==0) {
+		val = 1;  // value = atoi(argv[2])
+		if (!calc(argv[2]))
+			exit_invalid("Invalid Command -c Number");
+		if (val < 1 || val>1000000) 
+			exit_invalid("Invalid -c number");
 
-		memset(vis_magic, false, sizeof(vis_magic));
-		memset(vis_col, false, sizeof(vis_col));
-		memset(vis_row, false, sizeof(vis_row));
-		cnt = 0;
-		vis_row[0][1] = vis_col[0][1] = vis_magic[belonging(0, 0)][1] = true;
-		aaa[0] = 1 + '0';
-		if (debug_time) printTime("起始时间");
-		// value = 1000000;
-		dfs2(1);
-		if (debug_time) printTime("结束时间");
+		s.init_gen(val, 1);
 	}
-	else if (argv[1][1] == 's') {
+	else if (strcmp(argv[1], "-s") == 0) {
 		freopen(argv[2], "r", stdin);  // freopen("puzzlefile.txt", "r", stdin);
+		
+		s.init_sol();
+	}
+	else {
+		vector<string> cmd_type = { "-n", "-m", "-r", "-u" };
+		string str(argv[1]);
+		int type = -1;
+		bool flag_arg;
+		string arg_s, r_1, r_2;
+		map<string, int> mp;
+		for (int i_arg = 1; i_arg < argc; i_arg++) {
 
-		if (debug_time) printTime("起始时间");
-		while (scanf("%c", &ch) > 0) {
-			if (ch < '0' || ch > '9')
+			flag_arg = false;
+			for (auto sss : cmd_type) {
+				if (sss == argv[i_arg]) {
+					flag_arg = true;
+					arg_s = sss;
+					break;
+				}
+			}
+			if (!flag_arg) {
+				exit_invalid("Invalid Command - argument");
+			}
+			if (arg_s == "-u") {//-u -n 10
+				u_flag = true;
 				continue;
-			x[tot++] = ch - '0';
-			if (tot == 81) {
-				rep(i, 0, 80)
-					if (x[i] > 0)
-						modifyElement(i, x[i]);
+			}
+			if ((++i_arg) == argc) {//-n -u 10
+				exit_invalid("Lack number");
+			}
+			
+			if (arg_s == "-r") {
+				flag_arg = false;
+				rep (j, 0, (int)strlen(argv[i_arg]) - 1) {
+					if (argv[i_arg][j] == '~') {
+						flag_arg = true;
+						pos_r = j;
+						c[j] = '\0';
+						break;
+					}
+					c[j] = argv[i_arg][j];
+				}
+				if (!flag_arg)
+					exit_invalid("Invalid -r argument");
 
-				dfs(1);
-				tot = 0;
-				hasAnswer = false;
-				memset(a, 0, sizeof(a));
+				if (!calc(c))
+					exit_invalid("Invalid -r number1");
+				r1 = val;
+				memset(c, 0, sizeof(c));
+				rep(j, pos_r + 1, (int)strlen(argv[i_arg]))
+					c[j - pos_r - 1] = argv[i_arg][j];
+				if (!calc(c))
+					exit_invalid("Invalid -r number2");
+				r2 = val;
+				if (r1 < 20 || r2 < 20 || r1 > 55 || r2 > 55 || r1 > r2) 
+					exit_invalid("-r number should be in [20, 55] and r1<=r2");
+				mp[arg_s] = r1*100+r2;
+				continue ;
+			}
+			if (calc(argv[i_arg])) {
+				if (arg_s == "-n" && (val<1 || val>10000))
+					exit_invalid("Invalid -n number");
+				if (arg_s == "-m" && (val<1 || val>3))
+					exit_invalid("Invalid -m number");
+				if (arg_s == "-r" && (val<20 || val>55))
+					exit_invalid("Invalid -r number");
+				if (mp.count(arg_s) > 0)
+					exit_invalid("Repeated parameter!");
+				mp[arg_s] = val;
+			}
+			else {
+				exit_invalid("Invalid Command Number");
+			}
+
+		}
+
+		for (auto sss : cmd_type) {
+			if (sss == "-u")
+				continue;
+			cout << sss << " : " << mp.count(sss) << "    ";
+			if (mp.count(sss) > 0)
+				cout << mp[sss];
+			cout << endl;
+		}
+
+		if (mp.count("-m") > 0) {
+			cout << u_flag << "u——flag" << endl;
+			if (u_flag)
+				exit_invalid("-u can not be with -m");
+			if (mp.size() > 2)
+				exit_invalid("Too many arguments!");
+			if (mp.count("-n") == 0)
+				exit_invalid("-m must be with -n");
+			s.init_gen(10000, 0);//mp["-n"]*5
+			s.generate(mp["-n"], mp["-m"], ans_new);
+			rep(i, 1, mp["-n"]){
+				s.out_file(ans_new[i]);
+			}
+		}else
+		if (mp.count("-r") > 0) {  //
+			if (mp.size() > 2)
+				exit_invalid("Too many arguments!");
+			if (mp.count("-n") == 0)
+				exit_invalid("-m must be with -n");
+			s.init_gen(10000, 0);
+			s.generate(mp["-n"], r1, r2, u_flag, ans_new);
+			rep(i, 1, mp["-n"]) {
+				s.out_file(ans_new[i]);
 			}
 		}
-		if (debug_time) printTime("结束时间");
 	}
+	if (debug_time) printTime("结束时间");
 	return 0;
 }
