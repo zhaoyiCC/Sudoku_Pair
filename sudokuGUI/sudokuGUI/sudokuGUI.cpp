@@ -127,11 +127,11 @@ void sudokuGUI::writeRecordFile(string res[3]) {
 	fclose(recordFile);
 }
 void sudokuGUI::initMatrix() {
-	int res[2][83] = { 0 };
+	int res[1][83] = { 0 };
 	core.generate(1, difficultyChosen + 1, res);
 	for (int i = 0; i < matrixLen; i++)
 		for (int j = 0; j < matrixLen; j++)
-			matrix[i][j] = res[1][i*matrixLen + j];
+			matrix[i][j] = res[0][i*matrixLen + j];
 }
 
 void sudokuGUI::newGame() {
@@ -212,11 +212,6 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	QObject::connect(ui.action, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_2, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_3, SIGNAL(triggered(bool)), this, SLOT(newGame()));
-
-	labelTest.setParent(this);
-	labelTest.setGeometry(borderDistance + 8 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width, height / 2);
-	labelTest.setText("test");
-	labelTest.show();
 
 	init();
 }

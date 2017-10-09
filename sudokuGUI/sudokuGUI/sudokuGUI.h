@@ -46,7 +46,6 @@ private:
 
 	Core core;
 
-	QLabel labelTest;
 	private slots:
 	void keyboardButtonClicked();
 	void sudokuButtonClicked();
