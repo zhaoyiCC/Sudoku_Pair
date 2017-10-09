@@ -18,6 +18,7 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 	while (cnt_f < number) {
 		if (debug)
 			cout << "----------------------" << endl;
+		//srand((int)time(0));
 		first = random(ran) + from;
 		if (debug)
 			cout << "空白个数：" << first << endl;
@@ -95,7 +96,7 @@ void Core::init_gen(int val, int type) {
 	memset(vis_col, false, sizeof(vis_col));
 	memset(vis_row, false, sizeof(vis_row));
 
-
+	srand((int)time(0));
 	int sta = random(9) + 1;
 	cnt = 0;
 	vis_row[0][sta] = vis_col[0][sta] = vis_magic[belonging(0, 0)][sta] = true;
@@ -339,6 +340,7 @@ int Core::freedom(int a[M]) {
 
 double Core::getRandData(int min, int max)
 {
+	//srand((int)time(0));
 	double m1 = (double)(rand() % 101) / 101;                        // 计算 0，1之间的随机小数,得到的值域近似为(0,1)
 	min++;                                                                             //将 区间变为(min+1,max),
 	double m2 = (double)((rand() % (max - min + 1)) + min);    //计算 min+1,max 之间的随机整数，得到的值域为[min+1,max]

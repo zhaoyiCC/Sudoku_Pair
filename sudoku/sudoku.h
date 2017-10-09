@@ -26,7 +26,7 @@ static int ans_all_cnt = 0, ans_all[1000010][M], ans_new[50010][M];
 */
 
 
-class Core {
+class Core { //__declspec(dllexport)
 public:
 	int tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
 	bool debug;
