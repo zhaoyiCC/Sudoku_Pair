@@ -171,11 +171,14 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	btnFont.setBold(true);
+	btnFont.setPixelSize(20);
 	this->setFixedSize(width*matrixLen + 2 * borderDistance, height*(matrixLen + 1) + 2 * borderDistance + height);
 	for (int i = 0; i < matrixLen; i++) {
 		for (int j = 0; j < matrixLen; j++) {
 			btnFill[i][j].setParent(this);
 			btnFill[i][j].setGeometry(borderDistance + j*width + j, borderDistance + i*height + i, width, height);
+			btnFill[i][j].setFont(btnFont);
 			QObject::connect(&btnFill[i][j], SIGNAL(clicked()), this, SLOT(sudokuButtonClicked()));
 		}
 	}
@@ -183,6 +186,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 		btnChoice[i].setParent(this);
 		btnChoice[i].setText(btnChoiceContent[i]);
 		btnChoice[i].setGeometry(borderDistance + i*width * 4 / 5, borderDistance + matrixLen*height + 5 + matrixLen, width * 4 / 5, height * 4 / 5);
+		//btnChoice[i].setFont(btnFont);
 		btnChoice[i].show();
 		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
 	}

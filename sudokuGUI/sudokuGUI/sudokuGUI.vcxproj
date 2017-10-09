@@ -144,6 +144,12 @@
   <ItemGroup>
     <Library Include="SudokuDLL.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="myapp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="myapp.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

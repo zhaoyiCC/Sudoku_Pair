@@ -46,6 +46,7 @@ private:
 
 	Core core;
 
+	QFont btnFont;
 	private slots:
 	void keyboardButtonClicked();
 	void sudokuButtonClicked();
