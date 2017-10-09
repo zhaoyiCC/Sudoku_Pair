@@ -7,7 +7,7 @@ int main() {
 	c.generate(1, 25, 25, true, a);
 	printf("%d\n", c.debug);
 	//c.init_gen(1, 0);
-	rep(i, 1, 1) {
+	rep(i, 0, 0) {
 		cout << "-----------------------" << endl;
 		rep(j, 0, 80) {
 			cout << a[i][j] << " ";

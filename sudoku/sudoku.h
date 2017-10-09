@@ -59,6 +59,7 @@ public:
 
 	void generate(int number, int mode, int result[][M]);
 	void generate(int number, int lower, int upper, bool unique, int result[][M]);
+	bool check(int a[M]);
 	bool solve(int puzzle[M], int solution[M]);
 
 	void generate_single(int number, int from, int ran, int dow, int upd, bool unique, int result[][M]);

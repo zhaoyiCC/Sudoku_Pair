@@ -36,7 +36,7 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 			}
 
 			//cnt_f++;
-			memcpy(result[++cnt_f], game, sizeof(game));
+			memcpy(result[cnt_f++], game, sizeof(game));
 		}
 		id++;
 		if (debug)
@@ -62,6 +62,7 @@ void Core::generate(int number, int mode, int result[][M]) {
 	default:
 		cout << "Invalid: -m mode number should be 1 or 2 or 3" << endl;
 		return;
+		//throw std::exception("Invalid Command - argument");
 	}
 }
 
@@ -74,7 +75,38 @@ void Core::generate(int number, int lower, int upper, bool unique, int result[][
 	generate_single(number, lower, upper - lower + 1, 0, 9999, unique, result);
 }
 
+bool Core::check(int a[M]) {//check if the sudoku is valid
+	rep(i, 0, 80) {
+		if (a[i] < 0 || a[i] > 9)
+			return false;
+		/*cout << a[i] << " ";
+		if ((i + 1) % 9 == 0)
+		cout << endl;*/
+	}
+	//cout << endl;
+	bool vis_col[N][N], vis_row[N][N], vis_magic[N][N];
+	memset(vis_col, false, sizeof(vis_col));
+	memset(vis_magic, false, sizeof(vis_magic));
+	memset(vis_row, false, sizeof(vis_row));
+	int x, y;
+	rep(i, 0, 80) {
+		if (a[i] == 0)
+			continue;
+		x = i / 9;
+		y = i % 9;
+		if (vis_col[x][a[i]] || vis_row[y][a[i]] || vis_magic[belonging(x, y)][a[i]])
+			return false;
+		vis_col[x][a[i]] = true;
+		vis_row[y][a[i]] = true;
+		vis_magic[belonging(x, y)][a[i]] = true;
+	}
+	return true;
+}
+
 bool Core::solve(int puzzle[M], int solution[M]) {
+
+	if (!check(puzzle))
+		return false;
 	int sol = solve_unique(puzzle);
 	if (sol >= 1) {
 
@@ -114,20 +146,22 @@ void Core::init_gen(int val, int type) {
 	
 
 	//generate(1, 20, 60, true, lll);
+
 	//int ppp[M] = {
-	//	4, 0, 0, 0, 0, 0, 8, 0, 5,
-	//	0, 3, 0, 0, 0, 0, 0, 0, 0,
-	//	0, 0, 0, 7, 0, 0, 0, 0, 0,
-	//	0, 2, 0, 0, 0, 0, 0, 6, 0,
-	//	0, 0, 0, 0, 8, 0, 4, 0, 0,
-	//	0, 0, 0, 0, 1, 0, 0, 0, 0,
-	//	0, 0, 0, 6, 0, 3, 0, 7, 0,
-	//	5, 0, 0, 2, 0, 0, 0, 0, 0,
-	//	1, 0, 4, 0, 0, 0, 0, 0, 0
+	//	0, 0, 0, 0, 0, 5, 9, 0, 9,
+	//	3, 0, 5, 0, 0, 9, 0, 0, 6,
+	//	7, 8, 0, 0, 2, 0, 0, 0, 0,
+	//	1, 0, 0, 4, 0, 7, 6, 0, 0,
+	//	4, 5, 0, 0, 0, 1, 0, 0, 7,
+	//	8, 0, 0, 0, 0, 3, 0, 0, 0,
+	//	0, 0, 1, 0, 7, 0, 5, 0, 4,
+	//	0, 6, 4, 0, 0, 2, 8, 7, 3,
+	//	5, 7, 8, 6, 3, 4, 9, 1, 2
 	//};
 
 	//int kkk[M];
 	//bool zzyy = solve(ppp, kkk);
+	//cout << "solve: " << zzyy << endl;
 	////cout << "@@@@@@@@@@@@@@@@@" << endl;
 	//rep(i, 1, 1) {
 	//	rep(j, 0, 80) {
