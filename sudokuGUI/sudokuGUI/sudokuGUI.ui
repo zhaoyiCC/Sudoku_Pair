@@ -44,17 +44,17 @@
   </widget>
   <action name="action">
    <property name="text">
-    <string>简单</string>
+    <string>easy</string>
    </property>
   </action>
   <action name="action_2">
    <property name="text">
-    <string>中等</string>
+    <string>normal</string>
    </property>
   </action>
   <action name="action_3">
    <property name="text">
-    <string>困难</string>
+    <string>hard</string>
    </property>
   </action>
  </widget>

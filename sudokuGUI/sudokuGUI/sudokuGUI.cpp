@@ -39,6 +39,21 @@ void sudokuGUI::keyboardButtonClicked() {
 		int i = (btnTarget->y() - borderDistance) / (height + 1);
 		if (empty[i][j] == 1) {
 			if (btn->text() == HINT) {
+				int puzzle[83] = { 0 };
+				int solution[83] = { 0 };
+				for (int i = 0; i < matrixLen; i++)
+					for (int j = 0; j < matrixLen; j++) {
+						bool ok = false;
+						int x = btnFill[i][j].text().toInt(&ok, 10);
+						puzzle[i*matrixLen + j] = ok ? x : 0;
+					}
+				bool ok = core.solve(puzzle, solution);
+				if (ok) {
+					btnTarget->setText(QString::number(solution[i*matrixLen + j], 10));
+				}
+				else {
+					QMessageBox::critical(this, "warning", "No solution");
+				}
 			}
 			else if (btn->text() == CLEAR) {
 				btnFill[i][j].setText("");
@@ -97,7 +112,8 @@ void sudokuGUI::readRecordFile(string res[3]) {
 		fgets(s, 100, recordFile);
 		if (atoi(s) == 0) {
 			res[i] = "";
-		}else {
+		}
+		else {
 			res[i] = to_string(atoi(s));
 		}
 	}
@@ -110,26 +126,56 @@ void sudokuGUI::writeRecordFile(string res[3]) {
 	}
 	fclose(recordFile);
 }
+void sudokuGUI::initMatrix() {
+	int res[2][83] = { 0 };
+	core.generate(1, difficultyChosen + 1, res);
+	for (int i = 0; i < matrixLen; i++)
+		for (int j = 0; j < matrixLen; j++)
+			matrix[i][j] = res[1][i*matrixLen + j];
+}
+
+void sudokuGUI::newGame() {
+	if (QMessageBox::question(this, "new game?", "abort this and new game?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+		return;
+	}
+	QAction *type = qobject_cast<QAction*>(sender());
+	for (int i = 0; i < difficultyNum; i++)
+		if (type->text().toStdString() == difficultyTypes[i]) {
+			difficultyChosen = i;
+			break;
+		}
+	init();
+}
+void sudokuGUI::init() {
+	initMatrix();
+	for (int i = 0; i < matrixLen; i++)
+		for (int j = 0; j < matrixLen; j++)
+			empty[i][j] = matrix[i][j] == 0;
+	this->setWindowTitle("sudoku: " + QString::fromStdString(difficultyTypes[difficultyChosen]));
+	for (int i = 0; i < matrixLen; i++) {
+		for (int j = 0; j < matrixLen; j++) {
+			QString text_temp = matrix[i][j] == 0 ? " " : QString::number(matrix[i][j], 10);
+			QString styleSheet_temp = matrix[i][j] == 0 ? btnEmptyStyle : btnNotEmptyStyle;
+			btnFill[i][j].setText(text_temp);
+			btnFill[i][j].setStyleSheet(styleSheet_temp);
+			btnFill[i][j].show();
+		}
+	}
+	result.setText("result");
+	result.show();
+
+	timerCnt = 0;
+	timerLabel.setText("0");
+}
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	solver.buildMatrix(matrix);
-	for (int i = 0; i < matrixLen; i++)
-		for (int j = 0; j < matrixLen; j++)
-			empty[i][j] = matrix[i][j] == 0;
-	this->setWindowTitle("sudoku");
 	this->setFixedSize(width*matrixLen + 2 * borderDistance, height*(matrixLen + 1) + 2 * borderDistance + height);
 	for (int i = 0; i < matrixLen; i++) {
 		for (int j = 0; j < matrixLen; j++) {
 			btnFill[i][j].setParent(this);
-			QString text_temp = matrix[i][j] == 0 ? " " : QString::number(matrix[i][j], 10);
-			QString styleSheet_temp = matrix[i][j] == 0 ? btnEmptyStyle : btnNotEmptyStyle;
-			btnFill[i][j].setText(text_temp);
 			btnFill[i][j].setGeometry(borderDistance + j*width + j, borderDistance + i*height + i, width, height);
-			//btnFill[i][j].setStyleSheet("QPushButton{background-color:gray; color: black;   border - radius: 10px;  border: 1px groove gray; border - style: outset;}" "QPushButton:hover{background-color:green; color: black;}""QPushButton:pressed{background-color:rgb(85, 170, 255);border - style: inset;}");
-			btnFill[i][j].setStyleSheet(styleSheet_temp);
-			btnFill[i][j].show();
 			QObject::connect(&btnFill[i][j], SIGNAL(clicked()), this, SLOT(sudokuButtonClicked()));
 		}
 	}
@@ -140,24 +186,37 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 		btnChoice[i].show();
 		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
 	}
-	result.setText("result");
+
 	result.setParent(this);
 	result.setGeometry(borderDistance + 2 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width * 2, height / 2);
-	result.show();
+
 	btnSubmit.setText("submit");
 	btnSubmit.setParent(this);
 	btnSubmit.setGeometry(borderDistance + 4 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width, height / 2);
 	btnSubmit.show();
 	QObject::connect(&btnSubmit, SIGNAL(clicked()), this, SLOT(update()));
+
 	timer.setParent(this);
 	timerLabel.setParent(this);
 	timerLabel.setGeometry(borderDistance + 6 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width, height / 2);
-	timerLabel.setText("0");
 	timer.setInterval(1000);
 	timer.start();
 	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
+
 	btnRecord.setParent(this);
 	btnRecord.setGeometry(borderDistance + 7 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width, height / 2);
 	btnRecord.setText("record");
+	btnRecord.show();
 	QObject::connect(&btnRecord, SIGNAL(clicked()), this, SLOT(showRecord()));
+
+	QObject::connect(ui.action, SIGNAL(triggered(bool)), this, SLOT(newGame()));
+	QObject::connect(ui.action_2, SIGNAL(triggered(bool)), this, SLOT(newGame()));
+	QObject::connect(ui.action_3, SIGNAL(triggered(bool)), this, SLOT(newGame()));
+
+	labelTest.setParent(this);
+	labelTest.setGeometry(borderDistance + 8 * width, borderDistance + (matrixLen + 1)*height + matrixLen, width, height / 2);
+	labelTest.setText("test");
+	labelTest.show();
+
+	init();
 }

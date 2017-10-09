@@ -75,9 +75,9 @@ public:
     void retranslateUi(QMainWindow *sudokuGUIClass)
     {
         sudokuGUIClass->setWindowTitle(QApplication::translate("sudokuGUIClass", "sudokuGUI", Q_NULLPTR));
-        action->setText(QApplication::translate("sudokuGUIClass", "\347\256\200\345\215\225", Q_NULLPTR));
-        action_2->setText(QApplication::translate("sudokuGUIClass", "\344\270\255\347\255\211", Q_NULLPTR));
-        action_3->setText(QApplication::translate("sudokuGUIClass", "\345\233\260\351\232\276", Q_NULLPTR));
+        action->setText(QApplication::translate("sudokuGUIClass", "easy", Q_NULLPTR));
+        action_2->setText(QApplication::translate("sudokuGUIClass", "normal", Q_NULLPTR));
+        action_3->setText(QApplication::translate("sudokuGUIClass", "hard", Q_NULLPTR));
         menu->setTitle(QApplication::translate("sudokuGUIClass", "\346\226\260\346\270\270\346\210\217", Q_NULLPTR));
     } // retranslateUi
 

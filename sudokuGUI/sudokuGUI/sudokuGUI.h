@@ -8,7 +8,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <string>
-
+#include "sudoku.h"
 class sudokuGUI : public QMainWindow
 {
 	Q_OBJECT
@@ -41,8 +41,12 @@ private:
 
 	QTimer timer;
 	QLabel timerLabel;
+	
 	int timerCnt = 0;
 
+	Core core;
+
+	QLabel labelTest;
 	private slots:
 	void keyboardButtonClicked();
 	void sudokuButtonClicked();
@@ -51,6 +55,9 @@ private:
 	void showRecord();
 	void readRecordFile(string res[3]);
 	void writeRecordFile(string res[3]);
+	void initMatrix();
+	void newGame();
+	void init();
 protected:
 	void paintEvent(QPaintEvent *event);
 };

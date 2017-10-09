@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <qstring.h>
 #include <solver.h>
+#include <ctime>
 const int width = 50, height = 50;
 
 int main(int argc, char *argv[])
