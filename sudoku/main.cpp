@@ -40,16 +40,16 @@ void exit_invalid(string s) {
 }
 
 int main(int argc, char *argv[]) {
-	srand((int)time(0));
+	//srand((int)time(0));
 
 
 
 
 	Core s;
 
-
-	/*int lll[11][M];
-	s.generate(1, 1, lll);
+	s.debug = debug;
+	int lll[11][M];
+	s.generate(10, 1, lll);
 
 	rep(i, 0, 80) {
 		cout << lll[1][i] << " ";
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 			cout << endl;
 	}
 
-	return 0;*/
+	return 0;
 
 
 	/*if (argc != 3)
