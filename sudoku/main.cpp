@@ -5,7 +5,7 @@
 #include "sudoku.h"
 
 struct timeb tb;
-bool debug = false, debug_time = true, u_flag = false;
+bool debug = true, debug_time = true, u_flag = false;
 int val = 0, r1, r2, pos_r;
 char c[110];
 string getTime() {  // 得到当前时间的ms的时间
@@ -38,22 +38,27 @@ bool calc(char* s) {
 //	cout << s << endl;
 //	exit(0);
 //}
-
+int lll[10001][M];
 int main(int argc, char *argv[]) {
+	cout << atoi("123a") << endl;
 	//srand((int)time(0));
 	Core s;
 
-	/*s.debug = debug;
-	int lll[11][M];
-	s.generate(10, 1, lll);
+	s.debug = debug;
+	
+	//s.generate(10000, 1, lll);
+	s.generate(10000, 10, 60, true, lll);
 
-	rep(i, 0, 80) {
-		cout << lll[0][i] << " ";
-		if ((i + 1) % 9 == 0)
-			cout << endl;
-	}
+	/*rep(_, 0, 999) {
+		rep(i, 0, 80) {
+			cout << lll[_][i] << " ";
+			if ((i + 1) % 9 == 0)
+				cout << endl;
+		}
+		cout << endl;
+	}*/
 
-	return 0;*/
+	return 0;
 
 	
 	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
@@ -169,7 +174,7 @@ int main(int argc, char *argv[]) {
 					throw std::exception("-m must be with -n");
 				//s.init_gen(10000, 0);//mp["-n"]*5
 				s.generate(mp["-n"], mp["-m"], ans_new);
-				rep(i, 1, mp["-n"]) {
+				rep(i, 0, mp["-n"]-1) {
 					s.out_file(ans_new[i]);
 				}
 			}
@@ -181,7 +186,7 @@ int main(int argc, char *argv[]) {
 					throw std::exception("-m must be with -n");
 
 				s.generate(mp["-n"], r1, r2, u_flag, ans_new);
-				rep(i, 1, mp["-n"]) {
+				rep(i, 0, mp["-n"]-1) {
 					s.out_file(ans_new[i]);
 				}
 			}
