@@ -8,7 +8,10 @@
 #include <QPainter>
 #include <QTimer>
 #include <string>
+#include <QStackedWidget>
 #include "sudoku.h"
+#define COVER_BUTTON_WIDTH 100
+#define COVER_BUTTON_HEIGHT 50
 class sudokuGUI : public QMainWindow
 {
 	Q_OBJECT
@@ -31,9 +34,15 @@ private:
 	int empty[matrixLen][matrixLen];
 	int matrix[matrixLen][matrixLen];
 	int difficultyChosen = 0;
+	QStackedWidget m_widget;//负责多界面显示
+	QMainWindow coverWindow;//封面
+	QMainWindow gameWindow;//游戏进行的界面
 	Solver solver;
+	QPushButton btnStart;
+	QPushButton btnSetting;
 	QPushButton btnFill[matrixLen][matrixLen];
 	QPushButton btnChoice[keyboardKeysNum];
+	QPushButton btnHome;
 	QLabel result;
 	QPushButton btnSubmit;
 	QPushButton *btnTarget = NULL;//选中的按钮	
@@ -48,8 +57,11 @@ private:
 
 	QFont btnFont;
 	private slots:
+	void gameStart();
+	void gameSetting();
 	void keyboardButtonClicked();
 	void sudokuButtonClicked();
+	void gameToCover();
 	void update();
 	void updateTimerLabel();
 	void showRecord();
@@ -58,6 +70,7 @@ private:
 	void initMatrix();
 	void newGame();
 	void init();
+	void setDifficulty(int i);
 protected:
 	void paintEvent(QPaintEvent *event);
 };
