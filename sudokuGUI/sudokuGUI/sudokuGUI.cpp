@@ -77,7 +77,7 @@ void sudokuGUI::sudokuButtonClicked() {
 }
 void sudokuGUI::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
-	painter.setPen(QPen(Qt::blue, 1));
+	painter.setPen(QPen(Qt::red, 1));
 	for (int i = 0; i < 2; i++) {
 		painter.drawLine(borderDistance, borderDistance + (i + 1)*(height + 1) * 3 - 1,
 			borderDistance + matrixLen*(width + 1) - 1, borderDistance + (i + 1)*(height + 1) * 3 - 1);
