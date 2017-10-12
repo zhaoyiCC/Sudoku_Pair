@@ -31,44 +31,42 @@ bool calc(char* s) {
 			return false;
 		val = val * 10 + s[i] - '0';
 	}
-	cout << "val=" << val << endl;
+	//cout << "val=" << val << endl;
 	return true;
 }
 //void exit_invalid(string s) {
 //	cout << s << endl;
 //	exit(0);
 //}
+
+void help() {
+	cout << "【Supported Commands】" << endl;
+	cout << "    1. -c <N> : generate N sudokus, 1 <= N <= 1000000" << endl;
+	cout << "    2. -s <path> : solve sudoku puzzles in path file" << endl;
+	cout << "    3. -n <N> -m <M> (-u) : generate N sudokus which mode is M, M = 1,2,3 (-u means every soduku has a unique solution or not)" << endl;
+	cout << "    4. -n <N> -r <N1>~<N2> (-u) : generate N sudokus and the number of empty grids is bewteen [N1, N2], 20 <= N1 <= N2 <= 55" << endl;
+	cout << "    5. -help : show the help menu" << endl;
+	cout << "【Contact】" << endl;
+	cout << "    1. Email us: ohazyi(zhaoyi1031@gmail.com), yaoling(3791454124@qq.com)" << endl;
+	cout << "" << endl;
+}
 int lll[10001][M];
 int main(int argc, char *argv[]) {
-	cout << atoi("123a") << endl;
-	//srand((int)time(0));
+	
 	Core s;
-
-	s.debug = debug;
-	
-	//s.generate(10000, 1, lll);
-	s.generate(10000, 10, 60, true, lll);
-
-	/*rep(_, 0, 999) {
-		rep(i, 0, 80) {
-			cout << lll[_][i] << " ";
-			if ((i + 1) % 9 == 0)
-				cout << endl;
-		}
-		cout << endl;
-	}*/
-
-	return 0;
-
-	
 	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
 	s.debug = debug;
 	if (debug_time) printTime("起始时间");
 	try 
 	{
-		//throw std::exception("Invalid arguments!");
+		if (argc == 2 && strcmp(argv[1], "-help") == 0) {
+			help();
+			return 0;
+		}
+
 		if (argc < 3 || strlen(argv[1]) != 2)
-			throw std::exception("Invalid arguments!");
+			throw std::exception("【Invalid Command】Try -help.");
+		
 		if (strcmp(argv[1], "-c") == 0) {
 			val = 1;  // value = atoi(argv[2])
 			if (!calc(argv[2]))
@@ -83,7 +81,8 @@ int main(int argc, char *argv[]) {
 
 			s.init_sol();
 		}
-		else {
+		else 
+		{
 			vector<string> cmd_type = { "-n", "-m", "-r", "-u" };
 			string str(argv[1]);
 			int type = -1;
@@ -156,16 +155,21 @@ int main(int argc, char *argv[]) {
 			}
 
 			for (auto sss : cmd_type) {
-				if (sss == "-u")
+				if (sss == "-u") {
+					cout << "-u : Yes" << endl;
 					continue;
-				cout << sss << " : " << mp.count(sss) << "    ";
-				if (mp.count(sss) > 0)
-					cout << mp[sss];
+				}
+				cout << sss << " : " << ((mp.count(sss)==0)?"No":"Yes") << "    ";
+				if (mp.count(sss) > 0) {
+					if (sss == "-r")
+						cout << r1 << "-" << r2;
+					else
+						cout << mp[sss];
+				}
 				cout << endl;
 			}
 
 			if (mp.count("-m") > 0) {
-				cout << u_flag << "u——flag" << endl;
 				if (u_flag)
 					throw std::exception("-u can not be with -m");
 				if (mp.size() > 2)
@@ -196,7 +200,7 @@ int main(int argc, char *argv[]) {
 				throw std::exception("-n Must be with -m or -r");
 			}
 			else
-				throw std::exception("Invalid input: Unknown");
+				throw std::exception("【Invalid Command】Try -help.");
 		}
 	}
 	catch (const std::exception& e)

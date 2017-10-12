@@ -457,5 +457,100 @@ namespace UnitTest
 			s.generate(10001, 0, lll);
 			Assert::AreEqual(s.hasException, true);
 		}
+		/*
+		Test -c
+		*/
+		TEST_METHOD(TestMethod16)
+		{
+			Core s;
+			s.out = fopen("sudoku_16.txt", "w");
+
+			s.init_gen(1, 1);
+			bool zy = true;
+			rep(i, 1, 1) {
+				s.out_file(ans_all[i]);
+				if (!check(ans_all[i])) {
+					zy = false;
+					break;
+				}
+			}
+			Assert::AreEqual((!s.hasException&&zy), true);
+		}
+		/*
+		Test -c
+		*/
+		TEST_METHOD(TestMethod17)
+		{
+			Core s;
+			s.out = fopen("sudoku_17.txt", "w");
+
+			s.init_gen(10, 1);
+			bool zy = true;
+			rep(i, 1, 10) {
+				s.out_file(ans_all[i]);
+				if (!check(ans_all[i])) {
+					zy = false;
+					break;
+				}
+			}
+			Assert::AreEqual((!s.hasException&&zy), true);
+		}
+		/*
+		Test -c
+		*/
+		TEST_METHOD(TestMethod18)
+		{
+			Core s;
+			s.out = fopen("sudoku_18.txt", "w");
+
+			s.init_gen(100, 1);
+			bool zy = true;
+			rep(i, 1, 100) {
+				s.out_file(ans_all[i]);
+				if (!check(ans_all[i])) {
+					zy = false;
+					break;
+				}
+			}
+			Assert::AreEqual((!s.hasException&&zy), true);
+		}
+		/*
+		Test -c
+		*/
+		TEST_METHOD(TestMethod19)
+		{
+			Core s;
+			s.out = fopen("sudoku_19.txt", "w");
+
+			s.init_gen(1000, 1);
+			bool zy = true;
+			rep(i, 1, 1000) {
+				s.out_file(ans_all[i]);
+				if (!check(ans_all[i])) {
+					zy = false;
+					break;
+				}
+			}
+			Assert::AreEqual((!s.hasException&&zy), true);
+		}
+		/*
+		Test -c
+		*/
+		TEST_METHOD(TestMethod20)
+		{
+			Core s;
+			s.out = fopen("sudoku_20.txt", "w");
+
+			s.init_gen(1, 10000);
+			bool zy = true;
+			rep(i, 1, 10000) {
+				s.out_file(ans_all[i]);
+				if (!check(ans_all[i])) {
+					zy = false;
+					break;
+				}
+			}
+			Assert::AreEqual((!s.hasException&&zy), true);
+		}
 	};
 }

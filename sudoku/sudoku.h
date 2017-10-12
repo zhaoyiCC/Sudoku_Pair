@@ -31,7 +31,6 @@ public:
 	int sol = 0, tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
 	bool debug;
 	int hasAnswer = 0;
-	//bool modifyElement(int pos, int r), deleteElement(int pos, int r);
 	FILE *out;
 
 	int value, cnt, n, m, len = 0;  // value代表要输出的矩阵的个数
