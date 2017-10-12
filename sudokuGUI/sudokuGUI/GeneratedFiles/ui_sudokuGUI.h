@@ -78,7 +78,7 @@ public:
         action->setText(QApplication::translate("sudokuGUIClass", "easy", Q_NULLPTR));
         action_2->setText(QApplication::translate("sudokuGUIClass", "normal", Q_NULLPTR));
         action_3->setText(QApplication::translate("sudokuGUIClass", "hard", Q_NULLPTR));
-        menu->setTitle(QApplication::translate("sudokuGUIClass", "new game", Q_NULLPTR));
+        menu->setTitle(QApplication::translate("sudokuGUIClass", "New", Q_NULLPTR));
     } // retranslateUi
 
 };

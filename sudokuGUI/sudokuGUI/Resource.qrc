@@ -10,5 +10,24 @@
         <file>picture/gridBlue.png</file>
         <file>picture/gridPink.png</file>
         <file>picture/gridRed.png</file>
+        <file>picture/gridDeepBlue.png</file>
+        <file>picture/gridDeepGreen.png</file>
+        <file>picture/gridDeepYellow.png</file>
+        <file>picture/gridFlesh.png</file>
+        <file>picture/gridGreen.png</file>
+        <file>picture/gridYellow.png</file>
+        <file>picture/home0.png</file>
+        <file>picture/home1.png</file>
+        <file>picture/home2.png</file>
+        <file>picture/home3.png</file>
+        <file>picture/home4.png</file>
+        <file>picture/home5.png</file>
+        <file>picture/home6.png</file>
+        <file>picture/home7.png</file>
+        <file>picture/home8.png</file>
+        <file>picture/home9.png</file>
+        <file>picture/home10.png</file>
+        <file>picture/clock.png</file>
+        <file>picture/clock1.png</file>
     </qresource>
 </RCC>

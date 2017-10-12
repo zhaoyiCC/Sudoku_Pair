@@ -20,7 +20,7 @@ void sudokuGUI::gameSetting() {
 		if (btn[i] == mess.clickedButton()) {
 			setDifficulty(i);
 			break;
-		}
+		}	
 }
 void sudokuGUI::keyboardButtonClicked() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
@@ -57,6 +57,11 @@ void sudokuGUI::keyboardButtonClicked() {
 }
 void sudokuGUI::sudokuButtonClicked() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
+	int temp= btn->objectName().toInt();
+	int j = temp % 10;
+	int i = temp / 10;
+	if (empty[i][j] == 0)
+		return;
 	if (btnTarget != NULL) {
 		int temp = btnTarget->objectName().toInt();
 		int j = temp % 10;
@@ -98,11 +103,12 @@ void sudokuGUI::update() {
 	else {
 		result.setText("wrong!");
 	}
+	QMessageBox::about(&gameWindow, "result", result.text());
 }
 
 void sudokuGUI::updateTimerLabel() {
 	timerCnt++;
-	timerLabel.setText(QString::number(timerCnt, 10));
+	lbTimer.setText(QString::number(timerCnt, 10));
 }
 void sudokuGUI::showRecord() {
 	string res[3];
@@ -174,17 +180,17 @@ void sudokuGUI::init() {
 			btnFill[i][j].show();
 		}
 	}
-	result.setText("result");
-	result.show();
+	result.setText("result");	
 
 	timerCnt = 0;
-	timerLabel.setText("0");
+	lbTimer.setText("0");
 }
 void sudokuGUI::setDifficulty(int i) {
 	difficultyChosen = i;
 	this->setWindowTitle("sudoku: " + QString::fromStdString(difficultyTypes[difficultyChosen]));
+	init();
 }
-void sudokuGUI::setBackgroundImage(QLabel &l, QMainWindow &w, int x, int y, int width, int height,QString file) {
+void sudokuGUI::setBackgroundImage(QLabel &l, QMainWindow &w, int x, int y, int width, int height, QString file) {
 	QImage image(file);
 	l.setParent(&w);
 	l.setGeometry(x, y, width, height);
@@ -192,7 +198,27 @@ void sudokuGUI::setBackgroundImage(QLabel &l, QMainWindow &w, int x, int y, int 
 	pixmap.convertFromImage(image);
 	pixmap = pixmap.scaled(l.width(), l.height(),
 		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);//设置图片大小和label的长宽一致
-	l.setPixmap(pixmap);	
+	l.setPixmap(pixmap);
+}
+void sudokuGUI::setBtnZoomAction(QPushButton &btn) {
+	QObject::connect(&btn, SIGNAL(pressed()), this, SLOT(setBtnZoomOut()));
+	QObject::connect(&btn, SIGNAL(released()), this, SLOT(setBtnZoomIn()));
+}
+void sudokuGUI::setBtnZoomOut() {
+	QPushButton *btn = qobject_cast<QPushButton*>(sender());
+	int cx = btn->x() + btn->width() / 2;
+	int cy = btn->y() + btn->height() / 2;
+	int nw = btn->width()*ZOOM_OUT_RATIO;
+	int nh = btn->height()*ZOOM_OUT_RATIO;
+	btn->setGeometry(cx-nw/2, cy-nh/2,nw,nh);
+}
+void sudokuGUI::setBtnZoomIn() {
+	QPushButton *btn = qobject_cast<QPushButton*>(sender());
+	int cx = btn->x() + btn->width() / 2;
+	int cy = btn->y() + btn->height() / 2;
+	int nw = btn->width()/ZOOM_OUT_RATIO;
+	int nh = btn->height()/ZOOM_OUT_RATIO;
+	btn->setGeometry(cx - nw / 2, cy - nh / 2, nw, nh);
 }
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -204,18 +230,19 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	this->setCentralWidget(&m_widget);
 
 	btnFont.setBold(true);
-	btnFont.setPixelSize(26);	
+	btnFont.setPixelSize(26);
 	btnFont.setFamily("Times New Roman");
 
-	coverWindow.setFixedSize(GRID_WIDTH*matrixLen + 2 * BORDER_DISTANCE+2*JIUGONG_DISTANCE, GRID_HEIGHT*(matrixLen + 1) + 2 * BORDER_DISTANCE + GRID_HEIGHT + 2 * JIUGONG_DISTANCE);
+	this->setFixedSize(GRID_WIDTH*matrixLen + 2 * BORDER_DISTANCE + 2 * JIUGONG_DISTANCE + 8, GRID_HEIGHT*(matrixLen + 1) + 2 * BORDER_DISTANCE + GRID_HEIGHT + 2 * JIUGONG_DISTANCE + 8);
+	coverWindow.setFixedSize(GRID_WIDTH*matrixLen + 2 * BORDER_DISTANCE + 2 * JIUGONG_DISTANCE + 8, GRID_HEIGHT*(matrixLen + 1) + 2 * BORDER_DISTANCE + GRID_HEIGHT + 2 * JIUGONG_DISTANCE + 8);
 	gameWindow.setFixedSize(coverWindow.width(), coverWindow.height());
 	//coverWindow.setStyleSheet("background-image: url(:/new/src/1.png);");
 	//coverWindow.setStyleSheet("background-color:blue;");
 
-	setBackgroundImage(lbCover, coverWindow, 0, 0, coverWindow.width(), coverWindow.height(),":/new/src/picture/coverBackground2.jpg");
+	setBackgroundImage(lbCover, coverWindow, 0, 0, coverWindow.width(), coverWindow.height(), ":/new/src/picture/coverBackground2.jpg");
 	setBackgroundImage(lbGame, gameWindow, 0, 23, gameWindow.width(), gameWindow.height() + 23, ":/new/src/picture/coverBackground2.jpg");
 	setBackgroundImage(lbSudoku, coverWindow, coverWindow.width() / 2 - COVER_TITLE_WIDTH / 2, BORDER_DISTANCE, COVER_TITLE_WIDTH, COVER_TITLE_HEIGHT, ":/new/src/picture/sudoku.png");
-	
+
 
 	btnStart.setParent(&coverWindow);
 	btnStart.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 - 0.5*COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
@@ -225,13 +252,15 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	btnStart.setFont(btnFont);
 	btnStart.setParent(&coverWindow);
 	btnStart.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 - 0.5*COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
-	btnStart.show();
+	setBtnZoomAction(btnStart);
+	btnStart.show();	
 	QObject::connect(&btnStart, SIGNAL(clicked()), this, SLOT(gameStart()));
 
 	btnRecord.setParent(&coverWindow);
-	btnRecord.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 1* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+	btnRecord.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 1 * COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
 	btnRecord.setFont(btnFont);
 	btnRecord.setText("Record");
+	setBtnZoomAction(btnRecord);
 	btnRecord.show();
 	QObject::connect(&btnRecord, SIGNAL(clicked()), this, SLOT(showRecord()));
 
@@ -239,6 +268,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	btnSetting.setFont(btnFont);
 	btnSetting.setParent(&coverWindow);
 	btnSetting.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 2.5* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+	setBtnZoomAction(btnSetting);
 	btnSetting.show();
 	QObject::connect(&btnSetting, SIGNAL(clicked()), this, SLOT(gameSetting()));
 
@@ -246,46 +276,81 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	for (int i = 0; i < matrixLen; i++) {
 		for (int j = 0; j < matrixLen; j++) {
 			btnFill[i][j].setParent(&gameWindow);
-			btnFill[i][j].setGeometry(BORDER_DISTANCE + j*GRID_WIDTH + j + j / 3 * JIUGONG_DISTANCE, BORDER_DISTANCE + i*GRID_HEIGHT + i+i/3* JIUGONG_DISTANCE
+			btnFill[i][j].setGeometry(BORDER_DISTANCE + j*GRID_WIDTH + j + j / 3 * JIUGONG_DISTANCE, BORDER_DISTANCE + i*GRID_HEIGHT + i + i / 3 * JIUGONG_DISTANCE
 				, GRID_WIDTH, GRID_HEIGHT);
 			btnFill[i][j].setFont(btnFont);
 			btnFill[i][j].setObjectName(QString::number(i * 10 + j, 10));//将标号存储在objectName里
+			setBtnZoomAction(btnFill[i][j]);//按下变大松开变小
 			QObject::connect(&btnFill[i][j], SIGNAL(clicked()), this, SLOT(sudokuButtonClicked()));
 		}
 	}
-	for (int i = 0; i < keyboardKeysNum; i++) {
+
+	btnChoiceFont.setBold(true);
+	btnChoiceFont.setPixelSize(18);
+	btnChoiceFont.setFamily("Times New Roman");
+
+	for (int i = 0; i < keyboardKeysNum - 2; i++) {
 		btnChoice[i].setParent(&gameWindow);
 		btnChoice[i].setText(btnChoiceContent[i]);
-		btnChoice[i].setGeometry(BORDER_DISTANCE + i*GRID_WIDTH * 4 / 5, BORDER_DISTANCE + matrixLen*GRID_HEIGHT + 5 + matrixLen+2* JIUGONG_DISTANCE
-			, GRID_WIDTH * 4 / 5, GRID_HEIGHT * 4 / 5);
-		//btnChoice[i].setFont(btnFont);
+		btnChoice[i].setGeometry(BORDER_DISTANCE + i*GRID_CHOICE_WIDTH, BORDER_DISTANCE + matrixLen*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20
+			, GRID_CHOICE_WIDTH, GRID_CHOICE_HEIGHT);		
+		btnChoice[i].setFont(btnChoiceFont);
+		btnChoice[i].setStyleSheet(btnChoiceStyle);
 		btnChoice[i].show();
+		setBtnZoomAction(btnChoice[i]);
 		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
 	}
+	for (int i = keyboardKeysNum - 2; i < keyboardKeysNum; i++) {
+		btnChoice[i].setParent(&gameWindow);
+		btnChoice[i].setText(btnChoiceContent[i]);
+		btnChoice[i].setGeometry(gameWindow.width() - BORDER_DISTANCE - 2 * GRID_CHOICE_WIDTH + (i - keyboardKeysNum + 2)*GRID_CHOICE_WIDTH, BORDER_DISTANCE + matrixLen*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20
+			, GRID_CHOICE_WIDTH, GRID_CHOICE_HEIGHT);		
+		btnChoice[i].setFont(btnChoiceFont);
+		btnChoice[i].setStyleSheet(btnChoiceStyle);
+		btnChoice[i].show();
+		setBtnZoomAction(btnChoice[i]);
+		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
+	}
+	btnChoice[10].setFlat(true);
 
-	btnHome.setText("home");
-	btnHome.setParent(&gameWindow);
-	btnHome.setGeometry(BORDER_DISTANCE + 0 * GRID_WIDTH, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE
-		, GRID_WIDTH, GRID_HEIGHT / 2);
-	btnHome.show();
-	QObject::connect(&btnHome, SIGNAL(clicked()), this, SLOT(gameToCover()));
-
+	btnClock;	
+	btnClock.setParent(&gameWindow);
+	btnClock.setGeometry(BORDER_DISTANCE + 0 * GRID_WIDTH, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20 + (GRID_CHOICE_HEIGHT - BTN_SUBMIT_HEIGHT)
+		, BTN_SUBMIT_HEIGHT, BTN_SUBMIT_HEIGHT);
+	btnClock.setStyleSheet(btnClockStyle);	
+		
+	timer.setParent(&gameWindow);
+	lbTimer.setParent(&gameWindow);
+	lbTimer.setAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+	lbTimer.setFont(btnChoiceFont);
+	lbTimer.setGeometry(btnClock.x()+btnClock.width()+5, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20 + (GRID_CHOICE_HEIGHT - BTN_SUBMIT_HEIGHT)
+		, GRID_CHOICE_WIDTH, BTN_SUBMIT_HEIGHT);	
+	timer.setInterval(1000);
+	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
 
 	result.setParent(&gameWindow);
-	result.setGeometry(BORDER_DISTANCE + 2 * GRID_WIDTH, btnHome.y(), GRID_WIDTH * 2, GRID_HEIGHT / 2);
-
+	result.setAlignment(Qt::AlignCenter);
+	result.setGeometry(BORDER_DISTANCE + 2 * GRID_WIDTH, lbTimer.y()
+		, GRID_WIDTH * 2, BTN_SUBMIT_HEIGHT);
+	result.setVisible(false);
+	
 	btnSubmit.setText("submit");
 	btnSubmit.setParent(&gameWindow);
-	btnSubmit.setGeometry(BORDER_DISTANCE + 4 * GRID_WIDTH, btnHome.y(), GRID_WIDTH, GRID_HEIGHT / 2);
+	btnSubmit.setGeometry(BORDER_DISTANCE + 4 * GRID_WIDTH, lbTimer.y(), BTN_SUBMIT_WIDTH, BTN_SUBMIT_HEIGHT);
+	btnSubmit.setFont(btnChoiceFont);
+	btnSubmit.setStyleSheet(btnSubmitStyle);
+	setBtnZoomAction(btnSubmit);
 	btnSubmit.show();
 	QObject::connect(&btnSubmit, SIGNAL(clicked()), this, SLOT(update()));
 
-	timer.setParent(&gameWindow);
-	timerLabel.setParent(&gameWindow);
-	timerLabel.setGeometry(BORDER_DISTANCE + 6 * GRID_WIDTH, btnHome.y(), GRID_WIDTH, GRID_HEIGHT / 2);
-	timer.setInterval(1000);
-
-	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
+	//btnHome.setText("home");
+	btnHome.setParent(&gameWindow);
+	btnHome.setGeometry(coverWindow.width() - BORDER_DISTANCE - GRID_CHOICE_WIDTH, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20
+		, GRID_CHOICE_WIDTH, GRID_CHOICE_HEIGHT);
+	btnHome.setStyleSheet(btnHomeStyle);
+	setBtnZoomAction(btnHome);
+	btnHome.show();
+	QObject::connect(&btnHome, SIGNAL(clicked()), this, SLOT(gameToCover()));
 
 	QObject::connect(ui.action, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_2, SIGNAL(triggered(bool)), this, SLOT(newGame()));
