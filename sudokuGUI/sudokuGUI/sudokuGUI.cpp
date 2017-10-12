@@ -43,7 +43,7 @@ void sudokuGUI::keyboardButtonClicked() {
 					btnTarget->setText(QString::number(solution[i*matrixLen + j], 10));
 				}
 				else {
-					QMessageBox::critical(&gameWindow, "warning", "No solution");
+					QMessageBox::critical(&gameWindow, "warning", "No solution!  ");
 				}
 			}
 			else if (btn->text() == CLEAR) {
@@ -66,10 +66,14 @@ void sudokuGUI::sudokuButtonClicked() {
 		int temp = btnTarget->objectName().toInt();
 		int j = temp % 10;
 		int i = temp / 10;
-		QString styleSheet_temp = (empty[i][j] == 1) ? btnEmptyStyle : btnNotEmptyStyle;
-		btnTarget->setStyleSheet(styleSheet_temp);
+		setRowStyleSheet(i, btnEmptyStyle);
+		setColumnStyleSheet(j, btnEmptyStyle);
+		setJiugongStyleSheet(i, j, btnEmptyStyle);
 	}
 	btnTarget = btn;
+	setRowStyleSheet(i, btnOtherEmptyStyle);
+	setColumnStyleSheet(j, btnOtherEmptyStyle);
+	setJiugongStyleSheet(i, j, btnOtherEmptyStyle);
 	btnTarget->setStyleSheet(btnTargetStyle);
 }
 
@@ -90,7 +94,7 @@ void sudokuGUI::update() {
 					matrix[i][j] = -1;
 			}
 	if (solver.checkMatrix(matrix)) {
-		result.setText("right!");
+		result.setText("Right!    ");
 		timer.stop();
 		int finishTime = timerCnt;
 		string res[3];
@@ -101,9 +105,9 @@ void sudokuGUI::update() {
 		writeRecordFile(res);
 	}
 	else {
-		result.setText("wrong!");
+		result.setText("Wrong!    ");
 	}
-	QMessageBox::about(&gameWindow, "result", result.text());
+	QMessageBox::about(&gameWindow, "Result", result.text());
 }
 
 void sudokuGUI::updateTimerLabel() {
@@ -115,7 +119,7 @@ void sudokuGUI::showRecord() {
 	string outS = "";
 	readRecordFile(res);
 	for (int i = 0; i < difficultyNum; i++) {
-		outS += difficultyTypes[i] + ": " + res[i] + "s" + "\n";
+		outS += difficultyTypes[i] + ": " + res[i] + "s    " + "\n";
 	}
 	QMessageBox::about(&gameWindow, "record", outS.c_str());
 }
@@ -154,7 +158,7 @@ void sudokuGUI::initMatrix() {
 }
 
 void sudokuGUI::newGame() {
-	if (QMessageBox::question(&gameWindow, "new game?", "abort this and new game?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+	if (QMessageBox::question(&gameWindow, "New game?", "Abort this and new game?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
 		return;
 	}
 	QAction *type = qobject_cast<QAction*>(sender());
@@ -219,6 +223,29 @@ void sudokuGUI::setBtnZoomIn() {
 	int nw = btn->width()/ZOOM_OUT_RATIO;
 	int nh = btn->height()/ZOOM_OUT_RATIO;
 	btn->setGeometry(cx - nw / 2, cy - nh / 2, nw, nh);
+}
+void sudokuGUI::setRowStyleSheet(int o, QString styleSheet) {
+	for (int i = 0; i < matrixLen; i++)
+		if (empty[o][i] == 1)
+			btnFill[o][i].setStyleSheet(styleSheet);
+}
+void sudokuGUI::setColumnStyleSheet(int o, QString styleSheet) {
+	for (int i = 0; i < matrixLen; i++)
+		if (empty[i][o] == 1)
+			btnFill[i][o].setStyleSheet(styleSheet);
+}
+void sudokuGUI::setJiugongStyleSheet(int r, int c, QString styleSheet) {
+	r = r / 3 * 3;
+	c = c / 3 * 3;
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			if (empty[r + i][c + j] == 1)
+				btnFill[r + i][c + j].setStyleSheet(styleSheet);
+}
+void sudokuGUI::showAbout() {
+	QMessageBox::about(&gameWindow,"About",
+		"1. Email us :\n    ohazyi(zhaoyi1031@gmail.com)  \n    yaoling(3791454124@qq.com)  \n"
+		"2. Source Code :\n    github.com/ZhaoYi1031/Sudoku_Pair  ");
 }
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
@@ -355,6 +382,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	QObject::connect(ui.action, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_2, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_3, SIGNAL(triggered(bool)), this, SLOT(newGame()));
+	QObject::connect(ui.actionAbout, SIGNAL(triggered(bool)), this, SLOT(showAbout()));
 
 	init();
 }

@@ -29,11 +29,14 @@ public:
     QAction *action;
     QAction *action_2;
     QAction *action_3;
+    QAction *actionRules;
+    QAction *actionAbout;
     QWidget *centralWidget;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
     QMenu *menu;
+    QMenu *menuHelp;
 
     void setupUi(QMainWindow *sudokuGUIClass)
     {
@@ -46,6 +49,10 @@ public:
         action_2->setObjectName(QStringLiteral("action_2"));
         action_3 = new QAction(sudokuGUIClass);
         action_3->setObjectName(QStringLiteral("action_3"));
+        actionRules = new QAction(sudokuGUIClass);
+        actionRules->setObjectName(QStringLiteral("actionRules"));
+        actionAbout = new QAction(sudokuGUIClass);
+        actionAbout->setObjectName(QStringLiteral("actionAbout"));
         centralWidget = new QWidget(sudokuGUIClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sudokuGUIClass->setCentralWidget(centralWidget);
@@ -60,12 +67,17 @@ public:
         menuBar->setGeometry(QRect(0, 0, 600, 23));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
         sudokuGUIClass->setMenuBar(menuBar);
 
         menuBar->addAction(menu->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
         menu->addAction(action);
         menu->addAction(action_2);
         menu->addAction(action_3);
+        menuHelp->addAction(actionRules);
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(sudokuGUIClass);
 
@@ -75,10 +87,13 @@ public:
     void retranslateUi(QMainWindow *sudokuGUIClass)
     {
         sudokuGUIClass->setWindowTitle(QApplication::translate("sudokuGUIClass", "sudokuGUI", Q_NULLPTR));
-        action->setText(QApplication::translate("sudokuGUIClass", "easy", Q_NULLPTR));
-        action_2->setText(QApplication::translate("sudokuGUIClass", "normal", Q_NULLPTR));
-        action_3->setText(QApplication::translate("sudokuGUIClass", "hard", Q_NULLPTR));
+        action->setText(QApplication::translate("sudokuGUIClass", "Easy", Q_NULLPTR));
+        action_2->setText(QApplication::translate("sudokuGUIClass", "Normal", Q_NULLPTR));
+        action_3->setText(QApplication::translate("sudokuGUIClass", "Hard", Q_NULLPTR));
+        actionRules->setText(QApplication::translate("sudokuGUIClass", "Rules", Q_NULLPTR));
+        actionAbout->setText(QApplication::translate("sudokuGUIClass", "About", Q_NULLPTR));
         menu->setTitle(QApplication::translate("sudokuGUIClass", "New", Q_NULLPTR));
+        menuHelp->setTitle(QApplication::translate("sudokuGUIClass", "Help", Q_NULLPTR));
     } // retranslateUi
 
 };

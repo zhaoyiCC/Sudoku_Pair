@@ -40,21 +40,39 @@
     <addaction name="action_2"/>
     <addaction name="action_3"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionRules"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="action">
    <property name="text">
-    <string>easy</string>
+    <string>Easy</string>
    </property>
   </action>
   <action name="action_2">
    <property name="text">
-    <string>normal</string>
+    <string>Normal</string>
    </property>
   </action>
   <action name="action_3">
    <property name="text">
-    <string>hard</string>
+    <string>Hard</string>
+   </property>
+  </action>
+  <action name="actionRules">
+   <property name="text">
+    <string>Rules</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

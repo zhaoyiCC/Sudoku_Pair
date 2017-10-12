@@ -37,8 +37,9 @@ private:
 	const static int keyboardKeysNum = matrixLen + 2;
 	const QString btnChoiceContent[keyboardKeysNum] = { "1","2","3","4","5","6","7","8","9",CLEAR,HINT };
 	//const QString btnTargetStyle = "QPushButton{background-color:gray; color: black;   border - radius: 10px;  border: 1px groove gray; border - style: outset;}" "QPushButton:hover{background-color:green; color: black;}""QPushButton:pressed{background-color:rgb(85, 170, 255);border - style: inset;}";
-	const QString btnTargetStyle = "color:white;border-image:url(:/new/src/picture/gridDeepBlue.png)";
+	const QString btnTargetStyle = "color:white;border-image:url(:/new/src/picture/gridDeepGreen.png)";
 	//const QString btnEmptyStyle = "background-color: #ffffff;";
+	const QString btnOtherEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridDeepBlue.png)";
 	const QString btnEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridRed.png)";
 	//const QString btnNotEmptyStyle = "background-color: #DDDDDD;";		
 	const QString btnNotEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridBlack.png)";
@@ -48,7 +49,7 @@ private:
 	const QString btnHomeStyle = "color:black;border-image:url(:/new/src/picture/home10.png)";
 	const string recordFileName = "record.txt";
 	const static int difficultyNum = 3;
-	const string difficultyTypes[difficultyNum] = { "easy","normal","hard" };
+	const string difficultyTypes[difficultyNum] = { "Easy","Normal","Hard" };
 	Ui::sudokuGUIClass ui;
 	int empty[matrixLen][matrixLen];
 	int matrix[matrixLen][matrixLen];
@@ -98,5 +99,9 @@ private:
 	void setBackgroundImage(QLabel &a, QMainWindow &w, int x, int y, int width, int height, QString file);
 	void setBtnZoomAction(QPushButton &btn);
 	void setBtnZoomOut();
-	void setBtnZoomIn();
+	void setBtnZoomIn();	
+	void setRowStyleSheet(int o, QString styleSheet);
+	void setColumnStyleSheet(int o, QString styleSheet);
+	void setJiugongStyleSheet(int r,int c, QString styleSheet);
+	void showAbout();
 };
