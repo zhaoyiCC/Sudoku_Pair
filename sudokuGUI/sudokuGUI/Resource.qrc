@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/new/src">
+        <file>picture/1.png</file>
+        <file>picture/coverBackground.jpg</file>
+        <file>picture/coverBackground2.jpg</file>
+        <file>picture/coverBackground3.jpg</file>
+        <file>picture/sudoku.png</file>
+        <file>picture/sudoku2.png</file>
+        <file>picture/gridBlack.png</file>
+        <file>picture/gridBlue.png</file>
+        <file>picture/gridPink.png</file>
+        <file>picture/gridRed.png</file>
+    </qresource>
+</RCC>

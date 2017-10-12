@@ -45,6 +45,9 @@
     <ClCompile Include="GeneratedFiles\qrc_sudokuGUI.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Resource.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="sudokuGUI.h">
@@ -58,6 +61,9 @@
     </CustomBuild>
     <CustomBuild Include="solver.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Resource.qrc">
+      <Filter>Resource Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

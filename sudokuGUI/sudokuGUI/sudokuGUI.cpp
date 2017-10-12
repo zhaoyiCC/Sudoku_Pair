@@ -4,9 +4,6 @@
 #include <QPushButton>
 #include <QColorDialog>
 #include <QMessageBox>
-#define GRID_WIDTH 50
-#define GRID_HEIGHT 50
-#define borderDistance 50
 void sudokuGUI::gameStart() {
 	timer.start();
 	m_widget.setCurrentIndex(1);
@@ -28,8 +25,9 @@ void sudokuGUI::gameSetting() {
 void sudokuGUI::keyboardButtonClicked() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
 	if (btnTarget != NULL) {
-		int j = (btnTarget->x() - borderDistance) / (GRID_WIDTH + 1);
-		int i = (btnTarget->y() - borderDistance) / (GRID_HEIGHT + 1);
+		int temp = btnTarget->objectName().toInt();
+		int j = temp % 10;
+		int i = temp / 10;
 		if (empty[i][j] == 1) {
 			if (btn->text() == HINT) {
 				int puzzle[83] = { 0 };
@@ -60,8 +58,9 @@ void sudokuGUI::keyboardButtonClicked() {
 void sudokuGUI::sudokuButtonClicked() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
 	if (btnTarget != NULL) {
-		int j = (btnTarget->x() - borderDistance) / (GRID_WIDTH + 1);
-		int i = (btnTarget->y() - borderDistance) / (GRID_HEIGHT + 1);
+		int temp = btnTarget->objectName().toInt();
+		int j = temp % 10;
+		int i = temp / 10;
 		QString styleSheet_temp = (empty[i][j] == 1) ? btnEmptyStyle : btnNotEmptyStyle;
 		btnTarget->setStyleSheet(styleSheet_temp);
 	}
@@ -101,18 +100,6 @@ void sudokuGUI::update() {
 	}
 }
 
-void sudokuGUI::paintEvent(QPaintEvent *event) {
-	QPainter painter(&gameWindow);
-	painter.setPen(QPen(Qt::blue, 1));
-	for (int i = 0; i < 2; i++) {
-		painter.drawLine(borderDistance, borderDistance + (i + 1)*(GRID_HEIGHT + 1) * 3 - 1,
-			borderDistance + matrixLen*(GRID_WIDTH + 1) - 1, borderDistance + (i + 1)*(GRID_HEIGHT + 1) * 3 - 1);
-	}
-	for (int i = 0; i < 2; i++) {
-		painter.drawLine(borderDistance + (i + 1)*(GRID_WIDTH + 1) * 3 - 1, borderDistance,
-			borderDistance + (i + 1)*(GRID_WIDTH + 1) * 3 - 1, borderDistance + matrixLen*(GRID_HEIGHT + 1) - 1);
-	}
-}
 void sudokuGUI::updateTimerLabel() {
 	timerCnt++;
 	timerLabel.setText(QString::number(timerCnt, 10));
@@ -122,7 +109,7 @@ void sudokuGUI::showRecord() {
 	string outS = "";
 	readRecordFile(res);
 	for (int i = 0; i < difficultyNum; i++) {
-		outS += difficultyTypes[i] + ": " + res[i] + "s"+"\n";
+		outS += difficultyTypes[i] + ": " + res[i] + "s" + "\n";
 	}
 	QMessageBox::about(&gameWindow, "record", outS.c_str());
 }
@@ -197,6 +184,16 @@ void sudokuGUI::setDifficulty(int i) {
 	difficultyChosen = i;
 	this->setWindowTitle("sudoku: " + QString::fromStdString(difficultyTypes[difficultyChosen]));
 }
+void sudokuGUI::setBackgroundImage(QLabel &l, QMainWindow &w, int x, int y, int width, int height,QString file) {
+	QImage image(file);
+	l.setParent(&w);
+	l.setGeometry(x, y, width, height);
+	QPixmap pixmap;
+	pixmap.convertFromImage(image);
+	pixmap = pixmap.scaled(l.width(), l.height(),
+		Qt::IgnoreAspectRatio, Qt::SmoothTransformation);//设置图片大小和label的长宽一致
+	l.setPixmap(pixmap);	
+}
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -207,10 +204,22 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	this->setCentralWidget(&m_widget);
 
 	btnFont.setBold(true);
-	btnFont.setPixelSize(20);
+	btnFont.setPixelSize(26);	
+	btnFont.setFamily("Times New Roman");
 
-	coverWindow.setFixedSize(GRID_WIDTH*matrixLen + 2 * borderDistance, GRID_HEIGHT*(matrixLen + 1) + 2 * borderDistance + GRID_HEIGHT);
-	gameWindow.setFixedSize(GRID_WIDTH*matrixLen + 2 * borderDistance, GRID_HEIGHT*(matrixLen + 1) + 2 * borderDistance + GRID_HEIGHT);
+	coverWindow.setFixedSize(GRID_WIDTH*matrixLen + 2 * BORDER_DISTANCE+2*JIUGONG_DISTANCE, GRID_HEIGHT*(matrixLen + 1) + 2 * BORDER_DISTANCE + GRID_HEIGHT + 2 * JIUGONG_DISTANCE);
+	gameWindow.setFixedSize(coverWindow.width(), coverWindow.height());
+	//coverWindow.setStyleSheet("background-image: url(:/new/src/1.png);");
+	//coverWindow.setStyleSheet("background-color:blue;");
+
+	setBackgroundImage(lbCover, coverWindow, 0, 0, coverWindow.width(), coverWindow.height(),":/new/src/picture/coverBackground2.jpg");
+	setBackgroundImage(lbGame, gameWindow, 0, 23, gameWindow.width(), gameWindow.height() + 23, ":/new/src/picture/coverBackground2.jpg");
+	setBackgroundImage(lbSudoku, coverWindow, coverWindow.width() / 2 - COVER_TITLE_WIDTH / 2, BORDER_DISTANCE, COVER_TITLE_WIDTH, COVER_TITLE_HEIGHT, ":/new/src/picture/sudoku.png");
+	
+
+	btnStart.setParent(&coverWindow);
+	btnStart.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 - 0.5*COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+
 
 	btnStart.setText("Start");
 	btnStart.setFont(btnFont);
@@ -220,7 +229,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	QObject::connect(&btnStart, SIGNAL(clicked()), this, SLOT(gameStart()));
 
 	btnRecord.setParent(&coverWindow);
-	btnRecord.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 0.7* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+	btnRecord.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 1* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
 	btnRecord.setFont(btnFont);
 	btnRecord.setText("Record");
 	btnRecord.show();
@@ -229,7 +238,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	btnSetting.setText("Setting");
 	btnSetting.setFont(btnFont);
 	btnSetting.setParent(&coverWindow);
-	btnSetting.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 1.9* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+	btnSetting.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 2.5* COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
 	btnSetting.show();
 	QObject::connect(&btnSetting, SIGNAL(clicked()), this, SLOT(gameSetting()));
 
@@ -237,15 +246,18 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	for (int i = 0; i < matrixLen; i++) {
 		for (int j = 0; j < matrixLen; j++) {
 			btnFill[i][j].setParent(&gameWindow);
-			btnFill[i][j].setGeometry(borderDistance + j*GRID_WIDTH + j, borderDistance + i*GRID_HEIGHT + i, GRID_WIDTH, GRID_HEIGHT);
+			btnFill[i][j].setGeometry(BORDER_DISTANCE + j*GRID_WIDTH + j + j / 3 * JIUGONG_DISTANCE, BORDER_DISTANCE + i*GRID_HEIGHT + i+i/3* JIUGONG_DISTANCE
+				, GRID_WIDTH, GRID_HEIGHT);
 			btnFill[i][j].setFont(btnFont);
+			btnFill[i][j].setObjectName(QString::number(i * 10 + j, 10));//将标号存储在objectName里
 			QObject::connect(&btnFill[i][j], SIGNAL(clicked()), this, SLOT(sudokuButtonClicked()));
 		}
 	}
 	for (int i = 0; i < keyboardKeysNum; i++) {
 		btnChoice[i].setParent(&gameWindow);
 		btnChoice[i].setText(btnChoiceContent[i]);
-		btnChoice[i].setGeometry(borderDistance + i*GRID_WIDTH * 4 / 5, borderDistance + matrixLen*GRID_HEIGHT + 5 + matrixLen, GRID_WIDTH * 4 / 5, GRID_HEIGHT * 4 / 5);
+		btnChoice[i].setGeometry(BORDER_DISTANCE + i*GRID_WIDTH * 4 / 5, BORDER_DISTANCE + matrixLen*GRID_HEIGHT + 5 + matrixLen+2* JIUGONG_DISTANCE
+			, GRID_WIDTH * 4 / 5, GRID_HEIGHT * 4 / 5);
 		//btnChoice[i].setFont(btnFont);
 		btnChoice[i].show();
 		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
@@ -253,23 +265,24 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 
 	btnHome.setText("home");
 	btnHome.setParent(&gameWindow);
-	btnHome.setGeometry(borderDistance + 0 * GRID_WIDTH, borderDistance + (matrixLen + 1)*GRID_HEIGHT + matrixLen, GRID_WIDTH, GRID_HEIGHT / 2);
+	btnHome.setGeometry(BORDER_DISTANCE + 0 * GRID_WIDTH, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE
+		, GRID_WIDTH, GRID_HEIGHT / 2);
 	btnHome.show();
 	QObject::connect(&btnHome, SIGNAL(clicked()), this, SLOT(gameToCover()));
 
 
 	result.setParent(&gameWindow);
-	result.setGeometry(borderDistance + 2 * GRID_WIDTH, borderDistance + (matrixLen + 1)*GRID_HEIGHT + matrixLen, GRID_WIDTH * 2, GRID_HEIGHT / 2);
+	result.setGeometry(BORDER_DISTANCE + 2 * GRID_WIDTH, btnHome.y(), GRID_WIDTH * 2, GRID_HEIGHT / 2);
 
 	btnSubmit.setText("submit");
 	btnSubmit.setParent(&gameWindow);
-	btnSubmit.setGeometry(borderDistance + 4 * GRID_WIDTH, borderDistance + (matrixLen + 1)*GRID_HEIGHT + matrixLen, GRID_WIDTH, GRID_HEIGHT / 2);
+	btnSubmit.setGeometry(BORDER_DISTANCE + 4 * GRID_WIDTH, btnHome.y(), GRID_WIDTH, GRID_HEIGHT / 2);
 	btnSubmit.show();
 	QObject::connect(&btnSubmit, SIGNAL(clicked()), this, SLOT(update()));
 
 	timer.setParent(&gameWindow);
 	timerLabel.setParent(&gameWindow);
-	timerLabel.setGeometry(borderDistance + 6 * GRID_WIDTH, borderDistance + (matrixLen + 1)*GRID_HEIGHT + matrixLen, GRID_WIDTH, GRID_HEIGHT / 2);
+	timerLabel.setGeometry(BORDER_DISTANCE + 6 * GRID_WIDTH, btnHome.y(), GRID_WIDTH, GRID_HEIGHT / 2);
 	timer.setInterval(1000);
 
 	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));

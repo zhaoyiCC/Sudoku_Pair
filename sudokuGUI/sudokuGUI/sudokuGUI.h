@@ -10,8 +10,15 @@
 #include <string>
 #include <QStackedWidget>
 #include "sudoku.h"
-#define COVER_BUTTON_WIDTH 100
-#define COVER_BUTTON_HEIGHT 50
+#define COVER_BUTTON_WIDTH 140
+#define COVER_BUTTON_HEIGHT 60
+#define COVER_TITLE_WIDTH (582*0.9)
+#define COVER_TITLE_HEIGHT (131*0.9)
+#define GRID_WIDTH 50
+#define GRID_HEIGHT 50
+#define BORDER_DISTANCE 50
+#define JIUGONG_DISTANCE 5
+
 class sudokuGUI : public QMainWindow
 {
 	Q_OBJECT
@@ -24,9 +31,12 @@ private:
 	const QString CLEAR = "clear";
 	const static int keyboardKeysNum = matrixLen + 2;
 	const QString btnChoiceContent[keyboardKeysNum] = { "1","2","3","4","5","6","7","8","9",CLEAR,HINT };
-	const QString btnTargetStyle = "QPushButton{background-color:gray; color: black;   border - radius: 10px;  border: 1px groove gray; border - style: outset;}" "QPushButton:hover{background-color:green; color: black;}""QPushButton:pressed{background-color:rgb(85, 170, 255);border - style: inset;}";
-	const QString btnEmptyStyle = "background-color: #ffffff;";
-	const QString btnNotEmptyStyle = "background-color: #DDDDDD;";		
+	//const QString btnTargetStyle = "QPushButton{background-color:gray; color: black;   border - radius: 10px;  border: 1px groove gray; border - style: outset;}" "QPushButton:hover{background-color:green; color: black;}""QPushButton:pressed{background-color:rgb(85, 170, 255);border - style: inset;}";
+	const QString btnTargetStyle = "color:white;border-image:url(:/new/src/picture/gridPink.png)";
+	//const QString btnEmptyStyle = "background-color: #ffffff;";
+	const QString btnEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridRed.png)";
+	//const QString btnNotEmptyStyle = "background-color: #DDDDDD;";		
+	const QString btnNotEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridBlack.png)";
 	const string recordFileName = "record.txt";
 	const static int difficultyNum = 3;
 	const string difficultyTypes[difficultyNum] = { "easy","normal","hard" };
@@ -38,6 +48,9 @@ private:
 	QMainWindow coverWindow;//封面
 	QMainWindow gameWindow;//游戏进行的界面
 	Solver solver;
+	QLabel lbSudoku;
+	QLabel lbCover;
+	QLabel lbGame;
 	QPushButton btnStart;
 	QPushButton btnSetting;
 	QPushButton btnFill[matrixLen][matrixLen];
@@ -71,6 +84,5 @@ private:
 	void newGame();
 	void init();
 	void setDifficulty(int i);
-protected:
-	void paintEvent(QPaintEvent *event);
+	void setBackgroundImage(QLabel &a,QMainWindow &w, int x, int y, int width, int height, QString file);
 };
