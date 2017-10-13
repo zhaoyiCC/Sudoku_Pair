@@ -39,7 +39,7 @@ private:
 	//const QString btnTargetStyle = "QPushButton{background-color:gray; color: black;   border - radius: 10px;  border: 1px groove gray; border - style: outset;}" "QPushButton:hover{background-color:green; color: black;}""QPushButton:pressed{background-color:rgb(85, 170, 255);border - style: inset;}";
 	const QString btnTargetStyle = "color:white;border-image:url(:/new/src/picture/gridDeepGreen.png)";
 	//const QString btnEmptyStyle = "background-color: #ffffff;";
-	const QString btnOtherEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridDeepBlue.png)";
+	const QString btnNumberStyle = "color:white;border-image:url(:/new/src/picture/gridDeepBlue.png)";
 	const QString btnEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridRed.png)";
 	//const QString btnNotEmptyStyle = "background-color: #DDDDDD;";		
 	const QString btnNotEmptyStyle = "color:white;border-image:url(:/new/src/picture/gridBlack.png)";
@@ -100,8 +100,8 @@ private:
 	void setBtnZoomAction(QPushButton &btn);
 	void setBtnZoomOut();
 	void setBtnZoomIn();	
-	void setRowStyleSheet(int o, QString styleSheet);
-	void setColumnStyleSheet(int o, QString styleSheet);
-	void setJiugongStyleSheet(int r,int c, QString styleSheet);
+	void setRowStyleSheet(int o, QString styleSheet,int isEmpty);
+	void setColumnStyleSheet(int o, QString styleSheet, int isEmpty);
+	void setJiugongStyleSheet(int r,int c, QString styleSheet, int isEmpty);
 	void showAbout();
 };

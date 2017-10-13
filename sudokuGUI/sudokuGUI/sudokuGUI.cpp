@@ -66,15 +66,21 @@ void sudokuGUI::sudokuButtonClicked() {
 		int temp = btnTarget->objectName().toInt();
 		int j = temp % 10;
 		int i = temp / 10;
-		setRowStyleSheet(i, btnEmptyStyle);
-		setColumnStyleSheet(j, btnEmptyStyle);
-		setJiugongStyleSheet(i, j, btnEmptyStyle);
+		setRowStyleSheet(i, btnNotEmptyStyle, 0);
+		setColumnStyleSheet(j, btnNotEmptyStyle, 0);
+		setJiugongStyleSheet(i, j, btnNotEmptyStyle, 0);
+		setRowStyleSheet(i, btnEmptyStyle,1);
+		setColumnStyleSheet(j, btnEmptyStyle,1);
+		setJiugongStyleSheet(i, j, btnEmptyStyle,1);
 		btnTarget->setStyleSheet(btnEmptyStyle);
 	}
 	btnTarget = btn;
-	setRowStyleSheet(i, btnOtherEmptyStyle);
-	setColumnStyleSheet(j, btnOtherEmptyStyle);
-	setJiugongStyleSheet(i, j, btnOtherEmptyStyle);
+	setRowStyleSheet(i, btnNumberStyle, 0);
+	setColumnStyleSheet(j, btnNumberStyle, 0);
+	setJiugongStyleSheet(i, j, btnNumberStyle, 0);
+	setRowStyleSheet(i, btnNumberStyle,1);
+	setColumnStyleSheet(j, btnNumberStyle,1);
+	setJiugongStyleSheet(i, j, btnNumberStyle,1);
 	btnTarget->setStyleSheet(btnTargetStyle);
 }
 
@@ -225,22 +231,22 @@ void sudokuGUI::setBtnZoomIn() {
 	int nh = btn->height() / ZOOM_OUT_RATIO;
 	btn->setGeometry(cx - nw / 2, cy - nh / 2, nw, nh);
 }
-void sudokuGUI::setRowStyleSheet(int o, QString styleSheet) {
+void sudokuGUI::setRowStyleSheet(int o, QString styleSheet, int isEmpty) {
 	for (int i = 0; i < matrixLen; i++)
-		if (empty[o][i] == 1 && btnFill[o][i].text().toInt() != 0)
+		if (empty[o][i] == isEmpty&&btnFill[o][i].text().toInt() != 0)
 			btnFill[o][i].setStyleSheet(styleSheet);
 }
-void sudokuGUI::setColumnStyleSheet(int o, QString styleSheet) {
+void sudokuGUI::setColumnStyleSheet(int o, QString styleSheet, int isEmpty) {
 	for (int i = 0; i < matrixLen; i++)
-		if (empty[i][o] == 1 && btnFill[i][o].text().toInt() != 0)
+		if (empty[i][o] == isEmpty&&btnFill[i][o].text().toInt() != 0)
 			btnFill[i][o].setStyleSheet(styleSheet);
 }
-void sudokuGUI::setJiugongStyleSheet(int r, int c, QString styleSheet) {
+void sudokuGUI::setJiugongStyleSheet(int r, int c, QString styleSheet, int isEmpty) {
 	r = r / 3 * 3;
 	c = c / 3 * 3;
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			if (empty[r + i][c + j] == 1 && btnFill[r + i][c + j].text().toInt() != 0)
+			if (empty[r + i][c + j] == isEmpty&&btnFill[r + i][c + j].text().toInt() != 0)
 				btnFill[r + i][c + j].setStyleSheet(styleSheet);
 }
 void sudokuGUI::showAbout() {
