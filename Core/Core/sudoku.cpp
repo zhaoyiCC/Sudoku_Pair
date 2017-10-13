@@ -107,7 +107,7 @@ bool Core::check(int a[M]) {//check if the sudoku(with 0) is valid
 		if (a[i] < 0 || a[i] > 9)
 			return false;
 	}
-	
+
 	bool vis_col[N][N], vis_row[N][N], vis_magic[N][N];
 	memset(vis_col, false, sizeof(vis_col));
 	memset(vis_magic, false, sizeof(vis_magic));
@@ -277,7 +277,7 @@ void Core::dfs2(int k, int type) { //
 			if (x[i] <= 9)
 				x[i] += '0';
 		}
-		if (hasAnswer == 0){
+		if (hasAnswer == 0) {
 			rep(i, 0, 80)
 				ans_first[i] = x[i] - '0';
 		}
@@ -351,7 +351,7 @@ int Core::freedom(int a[M]) { //calcualte the freedom of sudoku
 }
 
 double Core::getRandData(int min, int max) { // get a random double in [min, max]
-	//srand((int)time(0));
+											 //srand((int)time(0));
 	double m1 = (double)(rand() % 101) / 101;                        // 计算 0，1之间的随机小数,得到的值域近似为(0,1)
 	min++;                                                                             //将 区间变为(min+1,max),
 	double m2 = (double)((rand() % (max - min + 1)) + min);    //计算 min+1,max 之间的随机整数，得到的值域为[min+1,max]
@@ -375,7 +375,7 @@ void Core::dfs3(int k, int tot) { // tranfer a complete sudoku to the one with 0
 }
 
 int Core::work3(int num_0_t, int id_t, double p_t) { //modify a complete sidoku with num_0 zeros, p is zero/81
-	//freopen("Ans.txt", "w", stdout);
+													 //freopen("Ans.txt", "w", stdout);
 	memset(isEmpty, true, sizeof(isEmpty));
 	id = id_t;
 	p_exist = p_t;

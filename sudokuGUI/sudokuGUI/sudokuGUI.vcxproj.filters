@@ -78,16 +78,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SudokuDLL.dll">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="SudokuDLL.lib">
-      <Filter>Resource Files</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="myapp.ico">
       <Filter>Resource Files</Filter>
     </Image>
@@ -96,5 +86,15 @@
     <ResourceCompile Include="myapp.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Core.lib">
+      <Filter>Resource Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>

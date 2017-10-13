@@ -26,11 +26,12 @@ static int ans_all_cnt = 0, ans_all[1000010][M], ans_new[50010][M];
 */
 
 
-class __declspec(dllexport) Core {
+class Core {
 public:
-	int sol = 0, tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
+	int tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
 	bool debug;
 	int hasAnswer = 0;
+	//bool modifyElement(int pos, int r), deleteElement(int pos, int r);
 	FILE *out;
 
 	int value, cnt, n, m, len = 0;  // value代表要输出的矩阵的个数
@@ -40,7 +41,6 @@ public:
 	int num_0, id, game[M];
 	bool isEmpty[M];
 	double p_exist;
-	bool hasException = false;
 
 	bool find(int x, int y, int z);
 	void init_gen(int val, int type);
@@ -59,7 +59,6 @@ public:
 
 	void generate(int number, int mode, int result[][M]);
 	void generate(int number, int lower, int upper, bool unique, int result[][M]);
-	bool check(int a[M]);
 	bool solve(int puzzle[M], int solution[M]);
 
 	void generate_single(int number, int from, int ran, int dow, int upd, bool unique, int result[][M]);

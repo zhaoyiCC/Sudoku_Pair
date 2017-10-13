@@ -30,7 +30,7 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 				uni = solve_unique(game);
 				if (uni > 1) {
 					if (debug)
-						cout << "^^^^解不唯一  " << id << endl;
+						cout << "********解不唯一********" << id << endl;
 					//id++;
 					continue;
 				}
