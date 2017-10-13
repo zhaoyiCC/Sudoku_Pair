@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <string>
 #include <QStackedWidget>
+#include <QKeyEvent>
 #include "sudoku.h"
 #define COVER_BUTTON_WIDTH 140
 #define COVER_BUTTON_HEIGHT 60
@@ -105,4 +106,6 @@ private:
 	void setJiugongStyleSheet(int r,int c, QString styleSheet, int isEmpty);
 	void showRules();
 	void showAbout();
+public:
+	void keyPressEvent(QKeyEvent  *event);
 };
