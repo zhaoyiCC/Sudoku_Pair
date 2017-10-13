@@ -103,5 +103,6 @@ private:
 	void setRowStyleSheet(int o, QString styleSheet,int isEmpty);
 	void setColumnStyleSheet(int o, QString styleSheet, int isEmpty);
 	void setJiugongStyleSheet(int r,int c, QString styleSheet, int isEmpty);
+	void showRules();
 	void showAbout();
 };

@@ -249,6 +249,10 @@ void sudokuGUI::setJiugongStyleSheet(int r, int c, QString styleSheet, int isEmp
 			if (empty[r + i][c + j] == isEmpty&&btnFill[r + i][c + j].text().toInt() != 0)
 				btnFill[r + i][c + j].setStyleSheet(styleSheet);
 }
+void sudokuGUI::showRules() {
+	QMessageBox::about(&gameWindow, "Rules",
+		"According to the known numbers, fill in the remaining blanks with number 1 to 9, so that each number of 1 to 9 appears only once in each row, each column and every palace, without duplication.");
+}
 void sudokuGUI::showAbout() {
 	QMessageBox::about(&gameWindow, "About",
 		"1. Email us :\n    ohazyi(zhaoyi1031@gmail.com)  \n    yaoling(3791454124@qq.com)  \n"
@@ -389,6 +393,7 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	QObject::connect(ui.action, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_2, SIGNAL(triggered(bool)), this, SLOT(newGame()));
 	QObject::connect(ui.action_3, SIGNAL(triggered(bool)), this, SLOT(newGame()));
+	QObject::connect(ui.actionRules, SIGNAL(triggered(bool)), this, SLOT(showRules()));
 	QObject::connect(ui.actionAbout, SIGNAL(triggered(bool)), this, SLOT(showAbout()));
 
 	init();
