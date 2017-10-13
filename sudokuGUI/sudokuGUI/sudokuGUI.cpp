@@ -101,7 +101,7 @@ void sudokuGUI::update() {
 					matrix[i][j] = -1;
 			}
 	if (solver.checkMatrix(matrix)) {
-		result.setText("Right!    ");
+		result.setText("Right !    ");
 		timer.stop();
 		int finishTime = timerCnt;
 		string res[3];
@@ -112,7 +112,7 @@ void sudokuGUI::update() {
 		writeRecordFile(res);
 	}
 	else {
-		result.setText("Wrong!    ");
+		result.setText("Wrong !    ");
 	}
 	QMessageBox::about(&gameWindow, "Result", result.text());
 }
