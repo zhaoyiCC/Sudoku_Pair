@@ -5,7 +5,7 @@
 #include "sudoku.h"
 
 struct timeb tb;
-bool debug = true, debug_time = true, u_flag = false;
+bool debug = false, debug_time = false, u_flag = false;
 int val = 0, r1, r2, pos_r;
 char c[110];
 string getTime() {  // 得到当前时间的ms的时间
@@ -65,14 +65,14 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (argc < 3 || strlen(argv[1]) != 2)
-			throw std::exception("【Invalid Command】Try -help.");
+			throw std::exception("【Insufficient arguments】Try -help");
 		
 		if (strcmp(argv[1], "-c") == 0) {
 			val = 1;  // value = atoi(argv[2])
 			if (!calc(argv[2]))
-				throw std::exception("Invalid Command -c Number");
+				throw std::exception("Use a number after -c");
 			if (val < 1 || val>1000000)
-				throw std::exception("Invalid -c number");
+				throw std::exception("-c number should be in [1,1000000]");
 
 			s.init_gen(val, 1);
 		}
@@ -100,14 +100,14 @@ int main(int argc, char *argv[]) {
 					}
 				}
 				if (!flag_arg) {
-					throw std::exception("Invalid Command - argument");
+					throw std::exception("Supported arguments: -c -s -n -m -r -u");
 				}
 				if (arg_s == "-u") {//-u -n 10
 					u_flag = true;
 					continue;
 				}
 				if ((++i_arg) == argc) {//-n -u 10
-					throw std::exception("Lack number");
+					throw std::exception("Lack number after -n/-m/-r");
 				}
 
 				if (arg_s == "-r") {
@@ -122,16 +122,16 @@ int main(int argc, char *argv[]) {
 						c[j] = argv[i_arg][j];
 					}
 					if (!flag_arg)
-						throw std::exception("Invalid -r argument");
+						throw std::exception("【-r Usage; -r r1~r2】");
 
 					if (!calc(c))
-						throw std::exception("Invalid -r number1");
+						throw std::exception("Use r1~r2 after -r, r1 should be a int");
 					r1 = val;
 					memset(c, 0, sizeof(c));
 					rep(j, pos_r + 1, (int)strlen(argv[i_arg]))
 						c[j - pos_r - 1] = argv[i_arg][j];
 					if (!calc(c))
-						throw std::exception("Invalid -r number2");
+						throw std::exception("Use r1~r2 after -r, r2 should be a int");
 					r2 = val;
 					if (r1 < 20 || r2 < 20 || r1 > 55 || r2 > 55 || r1 > r2)
 						throw std::exception("-r number should be in [20, 55] and r1<=r2");
@@ -140,11 +140,11 @@ int main(int argc, char *argv[]) {
 				}
 				if (calc(argv[i_arg])) {
 					if (arg_s == "-n" && (val < 1 || val>10000))
-						throw std::exception("Invalid -n number");
+						throw std::exception("-c number should be in [1,1000000]");
 					if (arg_s == "-m" && (val < 1 || val>3))
-						throw std::exception("Invalid -m number");
+						throw std::exception("-m number should be 1 or 2 or 3");
 					if (arg_s == "-r" && (val < 20 || val>55))
-						throw std::exception("Invalid -r number");
+						throw std::exception("lower and upper should be in [20, 55]");
 					if (mp.count(arg_s) > 0)
 						throw std::exception("Repeated parameter!");
 					mp[arg_s] = val;
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 				throw std::exception("-n Must be with -m or -r");
 			}
 			else
-				throw std::exception("【Invalid Command】Try -help.");
+				throw std::exception("【Other Invalid Command】Try -help");
 		}
 	}
 	catch (const std::exception& e)
