@@ -222,6 +222,9 @@ void sudokuGUI::setBtnZoomOut() {
 	int nw = btn->width()*ZOOM_OUT_RATIO;
 	int nh = btn->height()*ZOOM_OUT_RATIO;
 	btn->setGeometry(cx - nw / 2, cy - nh / 2, nw, nh);
+	QFont f = btn->font();
+	f.setPixelSize(f.pixelSize() + 2);
+	btn->setFont(f);
 }
 void sudokuGUI::setBtnZoomIn() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
@@ -230,6 +233,9 @@ void sudokuGUI::setBtnZoomIn() {
 	int nw = btn->width() / ZOOM_OUT_RATIO;
 	int nh = btn->height() / ZOOM_OUT_RATIO;
 	btn->setGeometry(cx - nw / 2, cy - nh / 2, nw, nh);
+	QFont f = btn->font();
+	f.setPixelSize(f.pixelSize() - 2);
+	btn->setFont(f);
 }
 void sudokuGUI::setRowStyleSheet(int o, QString styleSheet, int isEmpty) {
 	for (int i = 0; i < matrixLen; i++)
