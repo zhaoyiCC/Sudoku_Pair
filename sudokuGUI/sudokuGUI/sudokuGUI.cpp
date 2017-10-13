@@ -69,18 +69,18 @@ void sudokuGUI::sudokuButtonClicked() {
 		setRowStyleSheet(i, btnNotEmptyStyle, 0);
 		setColumnStyleSheet(j, btnNotEmptyStyle, 0);
 		setJiugongStyleSheet(i, j, btnNotEmptyStyle, 0);
-		setRowStyleSheet(i, btnEmptyStyle,1);
-		setColumnStyleSheet(j, btnEmptyStyle,1);
-		setJiugongStyleSheet(i, j, btnEmptyStyle,1);
+		setRowStyleSheet(i, btnEmptyStyle, 1);
+		setColumnStyleSheet(j, btnEmptyStyle, 1);
+		setJiugongStyleSheet(i, j, btnEmptyStyle, 1);
 		btnTarget->setStyleSheet(btnEmptyStyle);
 	}
 	btnTarget = btn;
 	setRowStyleSheet(i, btnNumberStyle, 0);
 	setColumnStyleSheet(j, btnNumberStyle, 0);
 	setJiugongStyleSheet(i, j, btnNumberStyle, 0);
-	setRowStyleSheet(i, btnNumberStyle,1);
-	setColumnStyleSheet(j, btnNumberStyle,1);
-	setJiugongStyleSheet(i, j, btnNumberStyle,1);
+	setRowStyleSheet(i, btnNumberStyle, 1);
+	setColumnStyleSheet(j, btnNumberStyle, 1);
+	setJiugongStyleSheet(i, j, btnNumberStyle, 1);
 	btnTarget->setStyleSheet(btnTargetStyle);
 }
 
@@ -250,13 +250,82 @@ void sudokuGUI::setJiugongStyleSheet(int r, int c, QString styleSheet, int isEmp
 				btnFill[r + i][c + j].setStyleSheet(styleSheet);
 }
 void sudokuGUI::showRules() {
+	//QMessageBox::about(&gameWindow, "Rules",
+	//	"According to the known numbers, fill in the remaining blanks with number 1 to 9, so that each number of 1 to 9 appears only once in each row, each column and every palace, without duplication.");
 	QMessageBox::about(&gameWindow, "Rules",
-		"According to the known numbers, fill in the remaining blanks with number 1 to 9, so that each number of 1 to 9 appears only once in each row, each column and every palace, without duplication.");
+		"    According to the known numbers, fill in the remaining blanks with number 1 to 9, so that each number of 1 to 9 appears only once in each row, each column and every palace, without duplication.\n"
+		"    Select a blank first, you can fill in the blank by keyboard or by clicking the buttons below. Click the \"clear\" button to clear the content of the grid or click the \"hint\" button to get the answer of the grid.\n"
+		"    The home icon at the bottom right can help you go back to the main interface to see the best record of the game.");
+
 }
 void sudokuGUI::showAbout() {
 	QMessageBox::about(&gameWindow, "About",
 		"1. Email us :\n    ohazyi(zhaoyi1031@gmail.com)  \n    yaoling(3791454124@qq.com)  \n"
 		"2. Source Code :\n    github.com/ZhaoYi1031/Sudoku_Pair  ");
+}
+void sudokuGUI::keyPressEvent(QKeyEvent  *event)
+{
+	if (event->key() == Qt::Key_0)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText(" ");
+		}
+	}
+	else if (event->key() == Qt::Key_1)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("1");
+		}
+	}
+	else if (event->key() == Qt::Key_2)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("2");
+		}
+	}
+	else if (event->key() == Qt::Key_3)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("3");
+		}
+	}
+	else if (event->key() == Qt::Key_4)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("4");
+		}
+	}
+	else if (event->key() == Qt::Key_5)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("5");
+		}
+	}
+	else if (event->key() == Qt::Key_6)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("6");
+		}
+	}
+	else if (event->key() == Qt::Key_7)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("7");
+		}
+	}
+	else if (event->key() == Qt::Key_8)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("8");
+		}
+	}
+	else if (event->key() == Qt::Key_9)
+	{
+		if (btnTarget != NULL) {
+			btnTarget->setText("9");
+		}
+	}
+
 }
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
