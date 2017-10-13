@@ -14,7 +14,7 @@ int Core::solve_unique(int tmp[M]) {
 }
 
 void Core::generate_single(int number, int from, int ran, int dow, int upd, bool unique, int result[][M]) {
-	int first, fre, cnt_f = 0, id = 1, uni;
+	int first, fre, cnt_f = 0, id = 1, uni, times = 0;
 	while (cnt_f < number) {
 		if (debug)
 			cout << "----------------------" << endl;
@@ -30,7 +30,12 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 				if (uni > 1) {
 					if (debug)
 						cout << "******** 解不唯一 ********" << id << endl;
+					times++;
 					//id++;
+					/*if (times > 1000) {
+						id++;
+						times = 0;
+					}*/
 					continue;
 				}
 			}
@@ -38,7 +43,9 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 			//cnt_f++;
 			memcpy(result[cnt_f++], game, sizeof(game));
 		}
+		//cout << id << " 花费的次数：" << times << endl;
 		id++;
+		times = 0;
 		if (debug)
 			cout << "----------------------" << id << endl;
 	}
@@ -143,7 +150,7 @@ bool Core::find(int x, int y, int z) {
 	return (!vis_row[x][z] && !vis_col[y][z] && !vis_magic[belonging(x, y)][z]);
 }
 
-void Core::init_gen(int val, int type) {
+void Core::init_gen(int val, int type) { //生成到ans_all里面，下标从1开始
 	memset(vis_magic, false, sizeof(vis_magic));
 	memset(vis_col, false, sizeof(vis_col));
 	memset(vis_row, false, sizeof(vis_row));
