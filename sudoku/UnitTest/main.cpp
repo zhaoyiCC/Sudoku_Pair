@@ -2,7 +2,7 @@
 //  Created by ohazyi on 2017/10/1.
 //  Copyright © 2017 ohazyi. All rights reserved.
 
-#include "sudoku.h"
+#include "../sudoku.h"
 
 struct timeb tb;
 bool debug = false, debug_time = false, u_flag = false;
@@ -84,21 +84,13 @@ int main(int argc, char *argv[]) {
 		else if (strcmp(argv[1], "-s") == 0) {
 			if (argc > 3)
 				throw std::exception("Excessive arguments of -s");
-
-			FILE *fp = NULL;
-			fp = fopen(argv[2], "r");
-			if (fp == NULL) {
-				throw std::exception("-s file doesn't exist");
-			}
-			
-
 			freopen(argv[2], "r", stdin);  // freopen("puzzlefile.txt", "r", stdin);
 
 			s.init_sol();
 			cout << "-s  解决了数独文件：";
 			printf("%s\n", argv[2]);
 		}
-		else 
+		else
 		{
 			vector<string> cmd_type = { "-n", "-m", "-r", "-u" };
 			string str(argv[1]);
@@ -176,7 +168,7 @@ int main(int argc, char *argv[]) {
 					cout << "-u : Yes" << endl;
 					continue;
 				}
-				cout << sss << " : " << ((mp.count(sss)==0)?"No":"Yes") << "    ";
+				cout << sss << " : " << ((mp.count(sss) == 0) ? "No" : "Yes") << "    ";
 				if (mp.count(sss) > 0) {
 					if (sss == "-r")
 						cout << r1 << "-" << r2;
@@ -195,29 +187,29 @@ int main(int argc, char *argv[]) {
 					throw std::exception("-m must be with -n");
 				//s.init_gen(10000, 0);//mp["-n"]*5
 				s.generate(mp["-n"], mp["-m"], ans_new);
-				rep(i, 0, mp["-n"]-1) {
+				rep(i, 0, mp["-n"] - 1) {
 					s.out_file(ans_new[i]);
 				}
 			}
 			else
-			if (mp.count("-r") > 0) {  //
-				if (mp.size() > 2)
-					throw std::exception("Too many arguments!");
-				if (mp.count("-n") == 0)
-					throw std::exception("-m must be with -n");
+				if (mp.count("-r") > 0) {  //
+					if (mp.size() > 2)
+						throw std::exception("Too many arguments!");
+					if (mp.count("-n") == 0)
+						throw std::exception("-m must be with -n");
 
-				s.generate(mp["-n"], r1, r2, u_flag, ans_new);
-				rep(i, 0, mp["-n"]-1) {
-					s.out_file(ans_new[i]);
+					s.generate(mp["-n"], r1, r2, u_flag, ans_new);
+					rep(i, 0, mp["-n"] - 1) {
+						s.out_file(ans_new[i]);
+					}
 				}
-			}
-			else 
-			if (mp.count("-n") > 0 && mp.size() == 1)
-			{
-				throw std::exception("-n Must be with -m or -r");
-			}
-			else
-				throw std::exception("【Other Invalid Command】Try -help");
+				else
+					if (mp.count("-n") > 0 && mp.size() == 1)
+					{
+						throw std::exception("-n Must be with -m or -r");
+					}
+					else
+						throw std::exception("【Other Invalid Command】Try -help");
 		}
 	}
 	catch (const std::exception& e)
