@@ -63,15 +63,16 @@ private:
 	QLabel lbCover;
 	QLabel lbGame;
 	QPushButton btnStart;
+	QPushButton btnRecord;
 	QPushButton btnSetting;
+	QPushButton btnExit;
 	QPushButton btnFill[matrixLen][matrixLen];
 	QPushButton btnChoice[keyboardKeysNum];
 	QPushButton btnClock;
 	QLabel result;
 	QPushButton btnSubmit;
 	QPushButton btnHome;
-	QPushButton *btnTarget = NULL;//选中的按钮	
-	QPushButton btnRecord;
+	QPushButton *btnTarget = NULL;//选中的按钮		
 
 	QTimer timer;
 	QLabel lbTimer;
@@ -106,6 +107,7 @@ private:
 	void setJiugongStyleSheet(int r,int c, QString styleSheet, int isEmpty);
 	void showRules();
 	void showAbout();
+	void gameExit();
 public:
 	void keyPressEvent(QKeyEvent  *event);
 };
