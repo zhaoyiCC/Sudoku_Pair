@@ -86,6 +86,13 @@ int main(int argc, char *argv[]) {
 				throw std::exception("Excessive arguments of -s");
 			freopen(argv[2], "r", stdin);  // freopen("puzzlefile.txt", "r", stdin);
 
+			FILE *fp = NULL;
+			fp = fopen(argv[2], "r");
+			if (fp == NULL) {
+				throw std::exception("-s file doesn't exist");
+			}
+
+
 			s.init_sol();
 			cout << "-s  解决了数独文件：";
 			printf("%s\n", argv[2]);
