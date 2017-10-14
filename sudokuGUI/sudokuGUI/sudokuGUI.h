@@ -108,6 +108,7 @@ private:
 	void showRules();
 	void showAbout();
 	void gameExit();
+	void timerSwitch();
 public:
 	void keyPressEvent(QKeyEvent  *event);
 };

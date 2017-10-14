@@ -341,6 +341,13 @@ void sudokuGUI::keyPressEvent(QKeyEvent  *event)
 	}
 
 }
+void sudokuGUI::timerSwitch() {
+	if (timer.isActive())
+		timer.stop();
+	else {
+		timer.start();
+	}
+}
 sudokuGUI::sudokuGUI(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -441,12 +448,13 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 		QObject::connect(&btnChoice[i], SIGNAL(clicked()), this, SLOT(keyboardButtonClicked()));
 	}
 	btnChoice[10].setFlat(true);
-
-	btnClock;
+	
 	btnClock.setParent(&gameWindow);
 	btnClock.setGeometry(BORDER_DISTANCE + 0 * GRID_WIDTH, BORDER_DISTANCE + (matrixLen + 1)*GRID_HEIGHT + matrixLen + 2 * JIUGONG_DISTANCE + 20 + (GRID_CHOICE_HEIGHT - BTN_SUBMIT_HEIGHT)
 		, BTN_SUBMIT_HEIGHT, BTN_SUBMIT_HEIGHT);
 	btnClock.setStyleSheet(btnClockStyle);
+	setBtnZoomAction(btnClock);
+	QObject::connect(&btnClock, SIGNAL(clicked()), this, SLOT(timerSwitch()));
 
 	timer.setParent(&gameWindow);
 	lbTimer.setParent(&gameWindow);
