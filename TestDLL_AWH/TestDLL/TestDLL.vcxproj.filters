@@ -15,15 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="headers.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="sudoku.h">
+    <ClInclude Include="Core2.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
@@ -35,6 +30,11 @@
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Core.dll">

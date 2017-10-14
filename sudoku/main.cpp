@@ -54,6 +54,10 @@ void help() {
 int main(int argc, char *argv[]) {
 
 	Core s;
+	/*int abc[11][M];
+	s.generate(-1, -1, abc);
+	return 0;*/
+
 	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
 
 	s.debug = debug;
