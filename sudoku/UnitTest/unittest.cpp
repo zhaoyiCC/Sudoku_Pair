@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
-#include "../sudoku.h"
+//#include "../sudoku.h"
+#include "../main.cpp"
 #include <iostream>
 #include <fstream>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -543,7 +544,7 @@ namespace UnitTest
 
 			s.init_gen(1, 10000);
 			bool zy = true;
-			rep(i, 1, 10000) {
+			rep(i, 1, 1) {
 				s.out_file(ans_all[i]);
 				if (!check(ans_all[i])) {
 					zy = false;
@@ -551,6 +552,26 @@ namespace UnitTest
 				}
 			}
 			Assert::AreEqual((!s.hasException&&zy), true);
+		}
+		/*
+		Test -n 100 -m 1
+		*/
+		TEST_METHOD(TestMethod21)
+		{
+			char *command[10] = { "sudoku.exe", "-n", "100", "-m", "1" };
+			main (5, (char**)command);
+			Assert::AreEqual(mainException, false);
+			mainException = false;
+		}
+		/*
+		Test -n 100 -m 4
+		*/
+		TEST_METHOD(TestMethod22)
+		{
+			char *command[] = { "sudoku.exe", "-n", "100", "-m", "4" };
+			main (5, (char**)command);
+			Assert::AreEqual(mainException, true);
+			mainException = false;
 		}
 	};
 }

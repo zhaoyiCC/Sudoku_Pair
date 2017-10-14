@@ -6,6 +6,7 @@
 
 struct timeb tb;
 bool debug = false, debug_time = false, u_flag = false;
+bool mainException = false;
 int val = 0, r1, r2, pos_r;
 char c[110];
 string getTime() {  // 得到当前时间的ms的时间
@@ -50,23 +51,33 @@ void help() {
 	cout << "    1. Email us: ohazyi(zhaoyi1031@gmail.com), yaoling(3791454124@qq.com)" << endl;
 	cout << "" << endl;
 }
-int lll[10001][M];
 int main(int argc, char *argv[]) {
 	
+	
+	
+
 	Core s;
 	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
+
+
+	fprintf(s.out, "%d\n", argc);
+	rep(i, 0, argc - 1) {
+		fprintf(s.out, "%s\n", argv[i]);
+	}
+
 	s.debug = debug;
 	if (debug_time) printTime("起始时间");
-	try 
+	try
 	{
 		if (argc == 2 && strcmp(argv[1], "-help") == 0) {
 			help();
 			return 0;
 		}
 
-		if (argc < 3 || strlen(argv[1]) != 2)
+		if (argc < 3 || strlen(argv[1]) != 2) {
 			throw std::exception("【Insufficient arguments】Try -help");
-		
+		}
+
 		if (strcmp(argv[1], "-c") == 0) {
 			val = 1;  // value = atoi(argv[2])
 			if (!calc(argv[2]))
@@ -205,6 +216,7 @@ int main(int argc, char *argv[]) {
 	}
 	catch (const std::exception& e)
 	{
+		mainException = true;
 		puts(e.what());
 	}
 	if (debug_time) printTime("结束时间");
