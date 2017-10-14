@@ -63,15 +63,16 @@ private:
 	QLabel lbCover;
 	QLabel lbGame;
 	QPushButton btnStart;
+	QPushButton btnRecord;
 	QPushButton btnSetting;
+	QPushButton btnExit;
 	QPushButton btnFill[matrixLen][matrixLen];
 	QPushButton btnChoice[keyboardKeysNum];
 	QPushButton btnClock;
 	QLabel result;
 	QPushButton btnSubmit;
 	QPushButton btnHome;
-	QPushButton *btnTarget = NULL;//选中的按钮	
-	QPushButton btnRecord;
+	QPushButton *btnTarget = NULL;//选中的按钮		
 
 	QTimer timer;
 	QLabel lbTimer;
@@ -100,12 +101,13 @@ private:
 	void setBackgroundImage(QLabel &a, QMainWindow &w, int x, int y, int width, int height, QString file);
 	void setBtnZoomAction(QPushButton &btn);
 	void setBtnZoomOut();
-	void setBtnZoomIn();	
-	void setRowStyleSheet(int o, QString styleSheet,int isEmpty);
+	void setBtnZoomIn();
+	void setRowStyleSheet(int o, QString styleSheet, int isEmpty);
 	void setColumnStyleSheet(int o, QString styleSheet, int isEmpty);
-	void setJiugongStyleSheet(int r,int c, QString styleSheet, int isEmpty);
+	void setJiugongStyleSheet(int r, int c, QString styleSheet, int isEmpty);
 	void showRules();
 	void showAbout();
+	void gameExit();
 public:
 	void keyPressEvent(QKeyEvent  *event);
 };

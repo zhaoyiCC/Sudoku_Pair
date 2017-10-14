@@ -8,9 +8,13 @@ void sudokuGUI::gameStart() {
 	timer.start();
 	m_widget.setCurrentIndex(1);
 	btnStart.setText("Resume");
-	btnSetting.setVisible(false);
 }
 void sudokuGUI::gameSetting() {
+	if (btnStart.text() == "Resume") {
+		if (QMessageBox::question(&coverWindow, "New game?", "Abort this and new game?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+			return;
+		}
+	}
 	QMessageBox mess(QMessageBox::Information, tr("Setting"), tr("Set difficulty"));
 	QPushButton *btn[difficultyNum];
 	for (int i = 0; i < difficultyNum; i++)
@@ -21,6 +25,7 @@ void sudokuGUI::gameSetting() {
 			setDifficulty(i);
 			break;
 		}
+	btnStart.setText("Start");
 }
 void sudokuGUI::keyboardButtonClicked() {
 	QPushButton *btn = qobject_cast<QPushButton*>(sender());
@@ -269,6 +274,9 @@ void sudokuGUI::showAbout() {
 		"1. Email us :\n    ohazyi(zhaoyi1031@gmail.com)  \n    yaoling(3791454124@qq.com)  \n"
 		"2. Source Code :\n    github.com/ZhaoYi1031/Sudoku_Pair  ");
 }
+void sudokuGUI::gameExit() {
+	QApplication::exit(0);
+}
 void sudokuGUI::keyPressEvent(QKeyEvent  *event)
 {
 	if (event->key() == Qt::Key_0)
@@ -385,6 +393,14 @@ sudokuGUI::sudokuGUI(QWidget *parent)
 	btnSetting.show();
 	QObject::connect(&btnSetting, SIGNAL(clicked()), this, SLOT(gameSetting()));
 
+	btnExit;
+	btnExit.setText("Exit");
+	btnExit.setFont(btnFont);
+	btnExit.setParent(&coverWindow);
+	btnExit.setGeometry(coverWindow.width() / 2 - COVER_BUTTON_WIDTH / 2, coverWindow.height() / 2 + 4 * COVER_BUTTON_HEIGHT, COVER_BUTTON_WIDTH, COVER_BUTTON_HEIGHT);
+	setBtnZoomAction(btnExit);
+	btnExit.show();
+	QObject::connect(&btnExit, SIGNAL(clicked()), this, SLOT(gameExit()));
 
 	for (int i = 0; i < matrixLen; i++) {
 		for (int j = 0; j < matrixLen; j++) {
