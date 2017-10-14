@@ -5,7 +5,7 @@
 #include "sudoku.h"
 
 struct timeb tb;
-bool debug = false, debug_time = false, u_flag = false;
+bool debug = false, debug_time = true, u_flag = false;
 bool mainException = false;
 int val = 0, r1, r2, pos_r;
 char c[110];
