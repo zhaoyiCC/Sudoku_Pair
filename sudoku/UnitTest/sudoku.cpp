@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "../sudoku.h"
+#include "sudoku.h"
 
 int Core::solve_unique(int tmp[M]) {
 	hasAnswer = 0;//false

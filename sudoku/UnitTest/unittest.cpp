@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 //#include "../sudoku.h"
-#include "../main.cpp"
+#include "main.cpp"
 #include <iostream>
 #include <fstream>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
