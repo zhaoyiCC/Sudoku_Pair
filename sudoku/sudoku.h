@@ -8,7 +8,7 @@ inline int belonging(int x, int y) { return x / 3 * 3 + y / 3 + 1; }
 inline int Position(int x, int y) { return 9 * x + y; }
 using namespace std;
 const int N = 11;
-const int M = 83;
+const int M = 81;
 
 static int ans_all_cnt = 0, ans_all[1000010][M], ans_new[50010][M];
 
@@ -26,7 +26,7 @@ static int ans_all_cnt = 0, ans_all[1000010][M], ans_new[50010][M];
 */
 
 
-class Core { //__declspec(dllexport)
+class __declspec(dllexport) Core { 
 public:
 	int sol = 0, tot, x[M], a[M][N], a_backup[M][M][N], aaa[M];
 	bool debug;
@@ -45,8 +45,8 @@ public:
 	bool find(int x, int y, int z); //判断数独[x][y]的位置能否填z
 	void init_gen(int val, int type); //处理-c
 	void init_sol(); //处理-s
-	void trans(int a[81]); //把当前数独进行数字转换，转换成第一行为1..9的数独
-	bool isEquivalent(int a[81], int b[81]); //判断数独a与数独b是不是等效
+	void trans(int a[M]); //把当前数独进行数字转换，转换成第一行为1..9的数独
+	bool isEquivalent(int a[M], int b[M]); //判断数独a与数独b是不是等效
 	bool deleteElement(int pos, int r); //求解数独中的操作_增加一个数独元素的限制
 	bool modifyElement(int pos, int r); //求解数独中的操作_填充一个数独元素
 	void out_file(int *s); //输出数独s到文件(sudoku.txt)中

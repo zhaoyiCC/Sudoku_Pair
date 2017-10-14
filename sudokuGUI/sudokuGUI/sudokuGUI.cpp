@@ -30,8 +30,8 @@ void sudokuGUI::keyboardButtonClicked() {
 		int i = temp / 10;
 		if (empty[i][j] == 1) {
 			if (btn->text() == HINT) {
-				int puzzle[83] = { 0 };
-				int solution[83] = { 0 };
+				int puzzle[M] = { 0 };
+				int solution[M] = { 0 };
 				for (int i = 0; i < matrixLen; i++)
 					for (int j = 0; j < matrixLen; j++) {
 						bool ok = false;
@@ -157,7 +157,7 @@ void sudokuGUI::writeRecordFile(string res[3]) {
 	fclose(recordFile);
 }
 void sudokuGUI::initMatrix() {
-	int res[1][83] = { 0 };
+	int res[1][M] = { 0 };
 	core.generate(1, difficultyChosen + 1, res);
 	for (int i = 0; i < matrixLen; i++)
 		for (int j = 0; j < matrixLen; j++)

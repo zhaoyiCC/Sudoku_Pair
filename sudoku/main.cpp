@@ -52,18 +52,9 @@ void help() {
 	cout << "" << endl;
 }
 int main(int argc, char *argv[]) {
-	
-	
-	
 
 	Core s;
 	s.out = fopen("sudoku.txt", "w");    // freopen("sudoku.txt", "w", stdout);
-
-
-	fprintf(s.out, "%d\n", argc);
-	rep(i, 0, argc - 1) {
-		fprintf(s.out, "%s\n", argv[i]);
-	}
 
 	s.debug = debug;
 	if (debug_time) printTime("起始时间");
@@ -79,6 +70,8 @@ int main(int argc, char *argv[]) {
 		}
 
 		if (strcmp(argv[1], "-c") == 0) {
+			if (argc > 3)
+				throw std::exception("Excessive arguments of -c");
 			val = 1;  // value = atoi(argv[2])
 			if (!calc(argv[2]))
 				throw std::exception("Use a number after -c");
@@ -86,11 +79,16 @@ int main(int argc, char *argv[]) {
 				throw std::exception("-c number should be in [1,1000000]");
 
 			s.init_gen(val, 1);
+			cout << "-c  生成数独数：" << val << endl;
 		}
 		else if (strcmp(argv[1], "-s") == 0) {
+			if (argc > 3)
+				throw std::exception("Excessive arguments of -s");
 			freopen(argv[2], "r", stdin);  // freopen("puzzlefile.txt", "r", stdin);
 
 			s.init_sol();
+			cout << "-s  解决了数独文件：";
+			printf("%s\n", argv[2]);
 		}
 		else 
 		{
