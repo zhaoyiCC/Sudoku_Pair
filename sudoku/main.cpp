@@ -24,8 +24,7 @@ void printTime(string str) {  // 得到当前时间
 	ftime(&tb);
 	printf(".%03d\n", tb.millitm);
 }
-
-bool calc(char* s) {
+bool calc(char* s) { //计算s字符串对应的值，如果不是数字串，就返回false.
 	val = 0;
 	for (int i = 0; s[i]; ++i) {
 		if (s[i] < '0' || s[i] > '9')
@@ -39,7 +38,6 @@ bool calc(char* s) {
 //	cout << s << endl;
 //	exit(0);
 //}
-
 void help() {
 	cout << "【Supported Commands】" << endl;
 	cout << "    1. -c <N> : generate N sudokus, 1 <= N <= 1000000" << endl;
@@ -91,7 +89,6 @@ int main(int argc, char *argv[]) {
 				throw std::exception("-s file doesn't exist");
 			}
 			
-
 			freopen(argv[2], "r", stdin);  // freopen("puzzlefile.txt", "r", stdin);
 
 			s.init_sol();
@@ -139,8 +136,7 @@ int main(int argc, char *argv[]) {
 						c[j] = argv[i_arg][j];
 					}
 					if (!flag_arg)
-						throw std::exception("【-r Usage; -r r1~r2】");
-
+						throw std::exception("There must be a ~【-r Usage; -r r1~r2】");
 					if (!calc(c))
 						throw std::exception("Use r1~r2 after -r, r1 should be a int");
 					r1 = val;
