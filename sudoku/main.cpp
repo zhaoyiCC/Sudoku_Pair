@@ -5,7 +5,7 @@
 #include "sudoku.h"
 
 struct timeb tb;
-bool debug = false, debug_time = true, u_flag = false;
+bool debug = false, debug_time = false, u_flag = false;
 bool mainException = false;
 int val = 0, r1, r2, pos_r;
 char c[110];
@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
 				}
 				if (calc(argv[i_arg])) {
 					if (arg_s == "-n" && (val < 1 || val>10000))
-						throw std::exception("-c number should be in [1,1000000]");
+						throw std::exception("-n number should be in [1,1000000]");
 					if (arg_s == "-m" && (val < 1 || val>3))
 						throw std::exception("-m number should be 1 or 2 or 3");
 					if (arg_s == "-r" && (val < 20 || val>55))
