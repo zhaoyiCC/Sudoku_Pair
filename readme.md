@@ -6,8 +6,12 @@
 	4. -n <N> -r <N1>~<N2> (-u) : generate N sudokus and the number of empty grids is bewteen [N1, N2], 20 <= N1 <= N2 <= 55
 	5. -help : show the help menu
     
+  ### 【Description】
+    1. Blog: http://www.cnblogs.com/ohazyi/p/7670382.html
+    2. Requirement: http://www.cnblogs.com/jiel/p/7604111.html
+    
 ### 【Contact】
-	1. Email us: ohazyi(zhaoyi1031@gmail.com), yaoling(3791454124@qq.com)
+	1. Email Us: ohazyi(zhaoyi1031@gmail.com), yaoling(3791454124@qq.com)
     2. Source Code: https://github.com/ZhaoYi1031/Sudoku_Pair
 
 
