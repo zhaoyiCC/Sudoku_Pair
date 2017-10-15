@@ -14,7 +14,8 @@ int Core::solve_unique(int tmp[M]) {
 }
 
 void Core::generate_single(int number, int from, int ran, int dow, int upd, bool unique, int result[][M]) {
-	int first, fre, cnt_f = 0, id = 1, uni;
+	int first, fre, cnt_f = 0, id = 1, uni, times = 0;
+	//cout << from << " " << ran << endl;
 	while (cnt_f < number) {
 		if (debug)
 			cout << "----------------------" << endl;
@@ -30,7 +31,12 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 				if (uni > 1) {
 					if (debug)
 						cout << "******** 解不唯一 ********" << id << endl;
+					times++;
 					//id++;
+					/*if (from==55&&ran==1&&times > 1000) {
+					id++;
+					times = 0;
+					}*/
 					continue;
 				}
 			}
@@ -38,7 +44,10 @@ void Core::generate_single(int number, int from, int ran, int dow, int upd, bool
 			//cnt_f++;
 			memcpy(result[cnt_f++], game, sizeof(game));
 		}
+		if (debug)
+			cout << id << " 花费的次数：" << times << endl;
 		id++;
+		times = 0;
 		if (debug)
 			cout << "----------------------" << id << endl;
 	}
@@ -107,7 +116,7 @@ bool Core::check(int a[M]) {//check if the sudoku(with 0) is valid
 		if (a[i] < 0 || a[i] > 9)
 			return false;
 	}
-	
+
 	bool vis_col[N][N], vis_row[N][N], vis_magic[N][N];
 	memset(vis_col, false, sizeof(vis_col));
 	memset(vis_magic, false, sizeof(vis_magic));
@@ -143,7 +152,7 @@ bool Core::find(int x, int y, int z) {
 	return (!vis_row[x][z] && !vis_col[y][z] && !vis_magic[belonging(x, y)][z]);
 }
 
-void Core::init_gen(int val, int type) {
+void Core::init_gen(int val, int type) { //生成到ans_all里面，下标从1开始
 	memset(vis_magic, false, sizeof(vis_magic));
 	memset(vis_col, false, sizeof(vis_col));
 	memset(vis_row, false, sizeof(vis_row));
@@ -277,7 +286,7 @@ void Core::dfs2(int k, int type) { //
 			if (x[i] <= 9)
 				x[i] += '0';
 		}
-		if (hasAnswer == 0){
+		if (hasAnswer == 0) {
 			rep(i, 0, 80)
 				ans_first[i] = x[i] - '0';
 		}
@@ -351,7 +360,7 @@ int Core::freedom(int a[M]) { //calcualte the freedom of sudoku
 }
 
 double Core::getRandData(int min, int max) { // get a random double in [min, max]
-	//srand((int)time(0));
+											 //srand((int)time(0));
 	double m1 = (double)(rand() % 101) / 101;                        // 计算 0，1之间的随机小数,得到的值域近似为(0,1)
 	min++;                                                                             //将 区间变为(min+1,max),
 	double m2 = (double)((rand() % (max - min + 1)) + min);    //计算 min+1,max 之间的随机整数，得到的值域为[min+1,max]
@@ -375,7 +384,7 @@ void Core::dfs3(int k, int tot) { // tranfer a complete sudoku to the one with 0
 }
 
 int Core::work3(int num_0_t, int id_t, double p_t) { //modify a complete sudoku with num_0 zeros, p is zero/81
-	//freopen("Ans.txt", "w", stdout);
+													 //freopen("Ans.txt", "w", stdout);
 	memset(isEmpty, true, sizeof(isEmpty));
 	id = id_t;
 	p_exist = p_t;
