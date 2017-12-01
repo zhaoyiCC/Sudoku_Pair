@@ -17,9 +17,9 @@ BIN/sudoku.exe
 
 GUIBIN/sudokuGUI.exe
 
-![](1.png)
+<img src="1.png" width="40%" height="30%"/>
 
-![](2.png)   
+<img src="2.jpg" width="40%" height="30%"/>
     
 ### 【Description】
 
