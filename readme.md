@@ -1,5 +1,5 @@
 
-### 【Supported Commands】
+## 【Supported Commands】
 
 BIN/sudoku.exe
 
@@ -13,15 +13,15 @@ BIN/sudoku.exe
 |-help   | show the help menu |
  
 
-### 【GUI】
+##【GUI】
 
 GUIBIN/sudokuGUI.exe
 
 <img src="1.png" width="40%" height="30%"/>
 
-<img src="2.jpg" width="40%" height="30%"/>
+<img src="2.png" width="40%" height="30%"/>
     
-### 【Description】
+## 【Description】
 
 1. Blog: [https://www.ohazyi.com/sudoku_2/](https://www.ohazyi.com/sudoku_2/)  or [http://www.cnblogs.com/ohazyi/p/7670382.html](http://www.cnblogs.com/ohazyi/p/7670382.html)
 
