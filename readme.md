@@ -14,7 +14,7 @@ BIN/sudoku.exe
  
 
 
-##【GUI】
+## 【GUI】
 
 
 GUIBIN/sudokuGUI.exe
